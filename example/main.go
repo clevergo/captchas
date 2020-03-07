@@ -13,8 +13,8 @@ import (
 	"github.com/clevergo/captchas"
 	"github.com/clevergo/captchas/drivers"
 	"github.com/clevergo/captchas/memstore"
-	"github.com/clevergo/captchas/redisstore"
-	"github.com/go-redis/redis/v7"
+	//"github.com/clevergo/captchas/redisstore"
+	//"github.com/go-redis/redis/v7"
 )
 
 var (
@@ -30,6 +30,8 @@ func main() {
 
 	store = memstore.New(10*time.Minute, time.Minute)
 
+	// redis store
+	/*
 	client := redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379",
 		Password: "",
@@ -40,6 +42,7 @@ func main() {
 		panic(err)
 	}
 	store = redisstore.New(client, 10*time.Minute)
+	*/
 
 	managerOpts := []captchas.Option{
 		// disable case sensitive, enabled by default, it will effects on string driver.
