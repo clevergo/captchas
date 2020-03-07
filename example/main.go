@@ -32,16 +32,16 @@ func main() {
 
 	// redis store
 	/*
-	client := redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
-		Password: "",
-		DB:       0,
-	})
-	_, err := client.Ping().Result()
-	if err != nil {
-		panic(err)
-	}
-	store = redisstore.New(client, 10*time.Minute)
+		client := redis.NewClient(&redis.Options{
+			Addr:     "localhost:6379",
+			Password: "",
+			DB:       0,
+		})
+		_, err := client.Ping().Result()
+		if err != nil {
+			panic(err)
+		}
+		store = redisstore.New(client, 10*time.Minute)
 	*/
 
 	managerOpts := []captchas.Option{
