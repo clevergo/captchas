@@ -23,3 +23,18 @@ func TestAudioLanguage(t *testing.T) {
 		t.Errorf("expected language %s, got %s", language, a.language)
 	}
 }
+
+func TestNewAudio(t *testing.T) {
+	d := NewAudio(
+		AudioLength(4),
+		AudioLangauge("zh"),
+	)
+
+	a, _ := d.(*audio)
+	if a.length != 4 {
+		t.Errorf("expected length %d, got %d", 4, a.length)
+	}
+	if a.language != "zh" {
+		t.Errorf("expected language %s, got %s", "zh", a.language)
+	}
+}
