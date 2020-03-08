@@ -46,7 +46,11 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
-		store = redisstore.New(client, 10*time.Minute)
+		store = redisstore.New(
+			client,
+			redisstore.Expiration(10*time.Minute), // key expiration, optional.
+			redisstore.Prefix("captchas"),         // key prefix, optional.
+		)
 	*/
 
 	// memcached store

@@ -22,6 +22,13 @@ func Prefix(prefix string) Option {
 	}
 }
 
+// Expiration sets the expiration.
+func Expiration(expiration time.Duration) Option {
+	return func(s *store) {
+		s.expiration = expiration
+	}
+}
+
 type store struct {
 	client     *redis.Client
 	expiration time.Duration
@@ -29,11 +36,11 @@ type store struct {
 }
 
 // New returns a redis store.
-func New(client *redis.Client, expiration time.Duration, opts ...Option) captchas.Store {
+func New(client *redis.Client, opts ...Option) captchas.Store {
 	s := &store{
 		client:     client,
 		prefix:     "captchas",
-		expiration: expiration,
+		expiration: 10 * time.Minute,
 	}
 
 	for _, f := range opts {
