@@ -13,7 +13,7 @@ import (
 func TestNew(t *testing.T) {
 	expiration := 10 * time.Minute
 	gcInterval := time.Minute
-	s := New(expiration, gcInterval)
+	s := New(Expiration(expiration), GCInterval(gcInterval))
 
 	mem, _ := s.(*store)
 	if mem.expiration != expiration {
@@ -25,7 +25,7 @@ func TestNew(t *testing.T) {
 }
 
 func TestStoreGet(t *testing.T) {
-	s := New(10*time.Minute, time.Minute)
+	s := New()
 	_, err := s.Get("foo", true)
 	if err == nil {
 		t.Error("expected a non-nil error, got nil")

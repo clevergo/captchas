@@ -11,6 +11,23 @@ import (
 	"github.com/clevergo/captchas"
 )
 
+// Option is a function that receives a pointer of store.
+type Option func(*store)
+
+// Expiration sets expiration.
+func Expiration(expiration time.Duration) Option {
+	return func(s *store) {
+		s.expiration = expiration
+	}
+}
+
+// GCInterval sets garbage collection .
+func GCInterval(interval time.Duration) Option {
+	return func(s *store) {
+		s.gcInterval = interval
+	}
+}
+
 type item struct {
 	expiration int64
 	answer     string
@@ -24,12 +41,16 @@ type store struct {
 }
 
 // New returns a memory store.
-func New(expiration time.Duration, gcInterval time.Duration) captchas.Store {
+func New(opts ...Option) captchas.Store {
 	s := &store{
 		mu:         &sync.RWMutex{},
-		expiration: expiration,
-		gcInterval: gcInterval,
+		expiration: 10 * time.Minute,
+		gcInterval: time.Minute,
 		items:      make(map[string]*item),
+	}
+
+	for _, f := range opts {
+		f(s)
 	}
 
 	go s.gc()

@@ -30,7 +30,10 @@ var (
 func main() {
 	flag.Parse()
 
-	store = memstore.New(10*time.Minute, time.Minute)
+	store = memstore.New(
+		memstore.Expiration(10*time.Minute), // expiration, optional.
+		memstore.GCInterval(time.Minute),    // garbage collection interval, optional.
+	)
 
 	// redis store
 	/*
