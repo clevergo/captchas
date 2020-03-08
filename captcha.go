@@ -19,5 +19,5 @@ type Captcha interface {
 
 	// HTMLField returns a template.HTML that includes captcha ID hidden input field
 	// and media field(audio/img).
-	HTMLField() template.HTML
+	HTMLField(fieldName string) template.HTML
 }
