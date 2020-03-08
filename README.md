@@ -16,6 +16,87 @@ $ cd example
 $ go run main.go
 ```
 
+### Quick Start
+
+```go
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"io"
+	"log"
+	"net/http"
+	"text/template"
+
+	"github.com/clevergo/captchas"
+	"github.com/clevergo/captchas/drivers"
+	"github.com/clevergo/captchas/memstore"
+)
+
+var (
+	store   = memstore.New()              // memory store.
+	driver  = drivers.NewDigit()          // digit driver.
+	manager = captchas.New(store, driver) // manager
+	tmpl    = template.Must(template.New("captcha").Parse(`
+<html>
+<body>
+<form action="/validate" method="POST">
+	<input name="captcha">
+	{{ .captcha.HTMLField "captcha_id" }}
+	<input type="submit" value="Submit">
+</form>
+</body>
+</html>
+	`))
+)
+
+func main() {
+	http.HandleFunc("/generate", generate)
+	http.HandleFunc("/validate", validate)
+	log.Println(http.ListenAndServe(":8080", http.DefaultServeMux))
+}
+
+// generates a new captcha
+func generate(w http.ResponseWriter, r *http.Request) {
+	captcha, err := manager.Generate()
+	if err != nil {
+		http.Error(w, err.Error(), 500)
+	}
+
+	// returns JSON data.
+	if r.URL.Query().Get("format") == "json" {
+		v := map[string]string{
+			"captcha_id":   captcha.ID(),             // captcha ID.
+			"captcha_data": captcha.EncodeToString(), // base64 encode string.
+		}
+		data, _ := json.Marshal(v)
+		w.Write(data)
+		return
+	}
+
+	// render captcha via template.
+	tmpl.Execute(w, map[string]interface{}{
+		"captcha": captcha,
+	})
+
+}
+
+// validates a captcha.
+func validate(w http.ResponseWriter, r *http.Request) {
+	captchaID := r.PostFormValue("captcha_id")
+	captcha := r.PostFormValue("captcha")
+
+	// verify
+	if err := manager.Verify(captchaID, captcha, true); err != nil {
+		io.WriteString(w, fmt.Sprintf("captcha is invalid: %s", err.Error()))
+		return
+	}
+
+	io.WriteString(w, "valid")
+}
+```
+
 ## Drivers
 
 ```go
