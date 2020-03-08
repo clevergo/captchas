@@ -5,7 +5,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/clevergo/captchas)](https://goreportcard.com/report/github.com/clevergo/captchas)
 [![Release](https://img.shields.io/github/release/clevergo/captchas.svg?style=flat-square)](https://github.com/clevergo/captchas/releases)
 
-Base64 Captchas Manager, supports multiple [drivers](#drivers)(digit, math, audio, string, chinese etc.) and [stores](#stores)(memory, redis etc.).
+Base64 Captchas Manager, supports multiple [drivers](#drivers)(digit, math, audio, string, chinese etc.) and [stores](#stores)(memory, redis, memcached etc.).
 
 ## Usage
 
@@ -126,6 +126,25 @@ client := redis.NewClient(&redis.Options{
 prefix := "captcha"            // redis key prefix, optional.
 expiration := 10 * time.Minute // captcha expiration.
 store := redisstore.New(client, expiration, redisstore.Prefix(prefix))
+```
+
+### Memcached Store
+
+```go
+import (
+	"github.com/bradfitz/gomemcache/memcache"
+	"github.com/clevergo/captchas/memcachedstore"
+)
+```
+
+```go
+// client.
+client := memcache.New("localhost:11211")
+store := memcachedstore.New(
+	client,
+	memcachedstore.Expiration(int32(600)), // captcha expiration, optional.
+	memcachedstore.Prefix("captchas"),     // key prefix, optional.
+)
 ```
 
 ### More
