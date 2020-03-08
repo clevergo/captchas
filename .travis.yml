@@ -6,6 +6,7 @@ go:
   - 1.13.x
   - master
 services:
+  - memcached
   - redis-server
 jobs:
   allow_failures:
