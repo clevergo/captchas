@@ -49,7 +49,11 @@ func main() {
 	// memcached store
 	/*
 		memcachedClient := memcache.New("localhost:11211")
-		store = memcachedstore.New(memcachedClient)
+		store = memcachedstore.New(
+			memcachedClient,
+			memcachedstore.Expiration(int32(600)), // captcha expiration, optional.
+			memcachedstore.Prefix("captchas"),     // key prefix, optional.
+		)
 	*/
 
 	managerOpts := []captchas.Option{
