@@ -9,6 +9,8 @@ Base64 Captchas Manager, supports multiple [drivers](#drivers)(digit, math, audi
 
 ## Usage
 
+Preview: http://129.204.189.159:10000/.
+
 ```shell
 $ cd example
 $ go run main.go
