@@ -105,6 +105,8 @@ gcInterval := time.Minute // garbage collection interval to delete expired captc
 store := memstore.New(expiration, gcInterval)
 ```
 
+> Inspired by [scs.memstore](https://github.com/alexedwards/scs/tree/master/memstore).
+
 ### Redis Store
 
 ```go
