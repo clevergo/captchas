@@ -95,21 +95,27 @@ driver := drivers.NewChinese(opts...)
 
 ## Stores
 
-### Memory Store
+- [memory](#memory)
+- [redis](#redis)
+- [memcached](#memcached)
+- add your store here by PR or [request a new store](https://github.com/clevergo/captchas/issues/new).
+
+### Memory
 
 ```go
 import "github.com/clevergo/captchas/memstore"
 ```
 
 ```go
-expiration := 10 * time.Minute // captcha expiration.
-gcInterval := time.Minute // garbage collection interval to delete expired captcha.
-store := memstore.New(expiration, gcInterval)
+store := memstore.New(
+	memstore.Expiration(10*time.Minute), // captcha expiration, optional.
+	memstore.GCInterval(time.Minute), // garbage collection interval to delete expired captcha, optional.
+)
 ```
 
 > Inspired by [scs.memstore](https://github.com/alexedwards/scs/tree/master/memstore).
 
-### Redis Store
+### Redis
 
 ```go
 import (
@@ -123,12 +129,14 @@ import (
 client := redis.NewClient(&redis.Options{
 	Addr: "localhost:6379",
 })
-prefix := "captcha"            // redis key prefix, optional.
-expiration := 10 * time.Minute // captcha expiration.
-store := redisstore.New(client, expiration, redisstore.Prefix(prefix))
+store := redisstore.New(
+	client,
+	redisstore.Expiration(expiration), // captcha expiration, optional.
+	redisstore.Prefix("caotchas"), // redis key prefix, optional.
+)
 ```
 
-### Memcached Store
+### Memcached
 
 ```go
 import (
@@ -146,8 +154,4 @@ store := memcachedstore.New(
 	memcachedstore.Prefix("captchas"),     // key prefix, optional.
 )
 ```
-
-### More
-
-Add your store here by PR or [request a new store](https://github.com/clevergo/captchas/issues/new).
 
