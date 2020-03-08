@@ -62,6 +62,7 @@ func generate(w http.ResponseWriter, r *http.Request) {
 	captcha, err := manager.Generate()
 	if err != nil {
 		http.Error(w, err.Error(), 500)
+                return
 	}
 
 	// returns JSON data.
