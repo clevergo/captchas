@@ -25,7 +25,7 @@ import "github.com/clevergo/captchas/drivers"
 ### Digit
 
 ```go
-// all options are optianal.
+// all options are optional.
 opts := []drivers.DigitOption{
 	drivers.DigitHeight(50),
 	drivers.DigitWidth(120),
@@ -39,7 +39,7 @@ driver := drivers.NewDigit(opts...)
 ### Audio
 
 ```go
-// all options are optianal.
+// all options are optional.
 opts := []drivers.AudioOption{
 	drivers.AudioLangauge("en"),
 	drivers.AudioLength(6),
@@ -50,7 +50,7 @@ driver := drivers.NewAudio(opts...)
 ### Math
 
 ```go
-// all options are optianal.
+// all options are optional.
 opts := []drivers.MathOption{
 	drivers.MathHeight(50),
 	drivers.MathWidth(120),
@@ -64,7 +64,7 @@ driver := drivers.NewMath(opts...)
 ### String
 
 ```go
-// all options are optianal.
+// all options are optional.
 opts := []drivers.StringOption{
 	drivers.StringHeight(50),
 	drivers.StringWidth(120),
@@ -80,7 +80,7 @@ driver := drivers.NewString(opts...)
 ### Chinese
 
 ```go
-// all options are optianal.
+// all options are optional.
 opts := []drivers.ChineseOption{
 	drivers.ChineseHeight(50),
 	drivers.ChineseWidth(120),
