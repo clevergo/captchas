@@ -45,7 +45,7 @@ func TestGetKey(t *testing.T) {
 func TestNew(t *testing.T) {
 	expiration := 10 * time.Minute
 	prefix := "foo"
-	s, _ := New(testClient, expiration, Prefix("prefix")).(*store)
+	s, _ := New(testClient, expiration, Prefix(prefix)).(*store)
 	if s.expiration != expiration {
 		t.Errorf("expected expiration %v, got %v", expiration, s.expiration)
 	}
