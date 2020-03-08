@@ -14,7 +14,7 @@ import (
 
 var tmplContent = `
 <input type="hidden" name="{{ .fieldName }}" value="{{ .captcha.ID }}">
-{{ if .captcha.IsAudioTag }}
+{{ if .captcha.IsTagAudio }}
 <audio controls {{ .captcha.MediaAttr }} />
 {{ else }}
 <img {{ .captcha.MediaAttr }} />
@@ -72,6 +72,6 @@ func (c *captcha) MediaAttr() template.HTMLAttr {
 	return template.HTMLAttr(fmt.Sprintf(`src="%s"`, c.item.EncodeB64string()))
 }
 
-func (c *captcha) IsAudioTag() bool {
+func (c *captcha) IsTagAudio() bool {
 	return c.tag == htmlTagAudio
 }
