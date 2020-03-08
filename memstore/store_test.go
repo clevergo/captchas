@@ -51,7 +51,7 @@ func TestStoreGet(t *testing.T) {
 	}
 }
 
-func TestStoreSet(t *testing.T) {
+func TestStoreDeleteExpired(t *testing.T) {
 	s := &store{
 		mu: &sync.RWMutex{},
 		items: map[string]*item{
