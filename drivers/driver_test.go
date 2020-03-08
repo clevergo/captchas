@@ -3,3 +3,11 @@
 // in the LICENSE file.
 
 package drivers
+
+import (
+	"testing"
+)
+
+func TestDriverGenerate(t *testing.T) {
+	// TBD
+}
