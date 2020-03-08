@@ -5,6 +5,8 @@ go:
   - 1.12.x
   - 1.13.x
   - master
+services:
+  - redis-server
 jobs:
   allow_failures:
     - go: master
