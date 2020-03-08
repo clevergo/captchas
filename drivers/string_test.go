@@ -52,7 +52,7 @@ func TestStringSource(t *testing.T) {
 	}
 }
 
-func TestNoiseCount(t *testing.T) {
+func TestStringNoiseCount(t *testing.T) {
 	s := &str{}
 	StringNoiseCount(4)(s)
 	if s.noiseCount != 4 {
