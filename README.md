@@ -5,7 +5,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/clevergo/captchas)](https://goreportcard.com/report/github.com/clevergo/captchas)
 [![Release](https://img.shields.io/github/release/clevergo/captchas.svg?style=flat-square)](https://github.com/clevergo/captchas/releases)
 
-Base64 Captchas Manager, supports multiple [drivers](#drivers) and [stores](#stores).
+Base64 Captchas Manager, supports multiple [drivers](#drivers)(digit, math, audio, string, chinese etc.) and [stores](#stores)(memory, redis etc.).
 
 ## Usage
 
