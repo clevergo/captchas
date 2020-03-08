@@ -15,6 +15,8 @@ import (
 	"github.com/clevergo/captchas/memstore"
 	//"github.com/clevergo/captchas/redisstore"
 	//"github.com/go-redis/redis/v7"
+	//"github.com/bradfitz/gomemcache/memcache"
+	//"github.com/clevergo/captchas/memcachedstore"
 )
 
 var (
@@ -42,6 +44,12 @@ func main() {
 			panic(err)
 		}
 		store = redisstore.New(client, 10*time.Minute)
+	*/
+
+	// memcached store
+	/*
+		memcachedClient := memcache.New("localhost:11211")
+		store = memcachedstore.New(memcachedClient)
 	*/
 
 	managerOpts := []captchas.Option{
