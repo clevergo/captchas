@@ -7,63 +7,62 @@ package drivers
 import (
 	"image/color"
 
-	"github.com/clevergo/captchas"
 	"github.com/mojocn/base64Captcha"
 )
 
 // ChineseOption is a function that receives a pointer of chinese driver.
-type ChineseOption func(*chinese)
+type ChineseOption func(*Chinese)
 
 // ChineseHeight sets height.
 func ChineseHeight(height int) ChineseOption {
-	return func(c *chinese) {
+	return func(c *Chinese) {
 		c.height = height
 	}
 }
 
 // ChineseWidth sets width.
 func ChineseWidth(width int) ChineseOption {
-	return func(c *chinese) {
+	return func(c *Chinese) {
 		c.width = width
 	}
 }
 
 // ChineseLength sets length.
 func ChineseLength(length int) ChineseOption {
-	return func(c *chinese) {
+	return func(c *Chinese) {
 		c.length = length
 	}
 }
 
 // ChineseSource sets source.
 func ChineseSource(source string) ChineseOption {
-	return func(c *chinese) {
+	return func(c *Chinese) {
 		c.source = source
 	}
 }
 
 // ChineseNoiseCount sets noise count.
 func ChineseNoiseCount(count int) ChineseOption {
-	return func(c *chinese) {
+	return func(c *Chinese) {
 		c.noiseCount = count
 	}
 }
 
 // ChineseBGColor sets background color.
 func ChineseBGColor(color *color.RGBA) ChineseOption {
-	return func(c *chinese) {
+	return func(c *Chinese) {
 		c.bgColor = color
 	}
 }
 
 // ChineseFonts sets fonts.
 func ChineseFonts(fonts []string) ChineseOption {
-	return func(c *chinese) {
+	return func(c *Chinese) {
 		c.fonts = fonts
 	}
 }
 
-type chinese struct {
+type Chinese struct {
 	*driver
 	// captcha png height in pixel.
 	height int
@@ -82,8 +81,8 @@ type chinese struct {
 const defaultChineseSource = "零一二三四五六七八九十"
 
 // NewChinese returns a chinese driver.
-func NewChinese(opts ...ChineseOption) captchas.Driver {
-	d := &chinese{
+func NewChinese(opts ...ChineseOption) *Chinese {
+	d := &Chinese{
 		driver:     &driver{htmlTag: htmlTagIMG},
 		height:     80,
 		width:      220,

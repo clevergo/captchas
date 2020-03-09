@@ -7,23 +7,21 @@ package memstore
 import (
 	"sync"
 	"time"
-
-	"github.com/clevergo/captchas"
 )
 
 // Option is a function that receives a pointer of store.
-type Option func(*store)
+type Option func(*Store)
 
 // Expiration sets expiration.
 func Expiration(expiration time.Duration) Option {
-	return func(s *store) {
+	return func(s *Store) {
 		s.expiration = expiration
 	}
 }
 
 // GCInterval sets garbage collection .
 func GCInterval(interval time.Duration) Option {
-	return func(s *store) {
+	return func(s *Store) {
 		s.gcInterval = interval
 	}
 }
@@ -33,7 +31,7 @@ type item struct {
 	answer     string
 }
 
-type store struct {
+type Store struct {
 	mu         *sync.RWMutex
 	expiration time.Duration
 	gcInterval time.Duration
@@ -41,8 +39,8 @@ type store struct {
 }
 
 // New returns a memory store.
-func New(opts ...Option) captchas.Store {
-	s := &store{
+func New(opts ...Option) *Store {
+	s := &Store{
 		mu:         &sync.RWMutex{},
 		expiration: 10 * time.Minute,
 		gcInterval: time.Minute,
@@ -59,52 +57,49 @@ func New(opts ...Option) captchas.Store {
 }
 
 // Get implements Store.Get.
-func (s *store) Get(id string, clear bool) (string, error) {
+func (s *Store) Get(id string, clear bool) (string, error) {
 	if clear {
-		item, err := s.getAndDel(id)
-		if err != nil {
-			return "", err
+		item := s.getAndDel(id)
+		if item == nil {
+			return "", nil
 		}
 		return item.answer, nil
 	}
 
 	s.mu.RLock()
 	defer s.mu.RUnlock()
-	item, err := s.get(id)
-	if err != nil {
-		return "", err
+	item := s.get(id)
+	if item == nil {
+		return "", nil
 	}
 	return item.answer, nil
 }
 
-func (s *store) get(id string) (*item, error) {
+func (s *Store) get(id string) *item {
 	item, ok := s.items[id]
-	if !ok {
-		return nil, captchas.ErrIncorrectCaptcha
-	}
-	if time.Now().UnixNano() > item.expiration {
-		return nil, captchas.ErrExpiredCaptcha
+	if ok &&  time.Now().UnixNano() < item.expiration {
+		return item
 	}
 
-	return item, nil
+	return nil
 }
 
-func (s *store) getAndDel(id string) (*item, error) {
+func (s *Store) getAndDel(id string) *item {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	item, err := s.get(id)
-	if err != nil {
-		return nil, err
+	item := s.get(id)
+	if item == nil {
+		return nil
 	}
 
 	delete(s.items, id)
 
-	return item, err
+	return item
 }
 
 // Set implements Store.Set.
-func (s *store) Set(id, answer string) error {
+func (s *Store) Set(id, answer string) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.items[id] = &item{
@@ -114,7 +109,7 @@ func (s *store) Set(id, answer string) error {
 	return nil
 }
 
-func (s *store) gc() {
+func (s *Store) gc() {
 	ticker := time.NewTicker(s.gcInterval)
 	for {
 		select {
@@ -124,7 +119,7 @@ func (s *store) gc() {
 	}
 }
 
-func (s *store) deleteExpired() {
+func (s *Store) deleteExpired() {
 	now := time.Now().UnixNano()
 	s.mu.Lock()
 	defer s.mu.Unlock()

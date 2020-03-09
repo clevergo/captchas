@@ -5,49 +5,48 @@
 package drivers
 
 import (
-	"github.com/clevergo/captchas"
 	"github.com/mojocn/base64Captcha"
 )
 
 // DigitOption is a function that receives a pointer of digit driver.
-type DigitOption func(*digit)
+type DigitOption func(*Digit)
 
 // DigitHeight sets height.
 func DigitHeight(height int) DigitOption {
-	return func(d *digit) {
+	return func(d *Digit) {
 		d.height = height
 	}
 }
 
 // DigitWidth sets width.
 func DigitWidth(width int) DigitOption {
-	return func(d *digit) {
+	return func(d *Digit) {
 		d.width = width
 	}
 }
 
 // DigitLength sets length.
 func DigitLength(length int) DigitOption {
-	return func(d *digit) {
+	return func(d *Digit) {
 		d.length = length
 	}
 }
 
 // DigitMaxSkew sets max skew.
 func DigitMaxSkew(maxSkew float64) DigitOption {
-	return func(d *digit) {
+	return func(d *Digit) {
 		d.maxSkew = maxSkew
 	}
 }
 
 // DigitDotCount sets dot count.
 func DigitDotCount(count int) DigitOption {
-	return func(d *digit) {
+	return func(d *Digit) {
 		d.dotCount = count
 	}
 }
 
-type digit struct {
+type Digit struct {
 	*driver
 	// captcha png height in pixel.
 	height int
@@ -62,8 +61,8 @@ type digit struct {
 }
 
 // NewDigit return a digit driver.
-func NewDigit(opts ...DigitOption) captchas.Driver {
-	d := &digit{
+func NewDigit(opts ...DigitOption) *Digit {
+	d := &Digit{
 		driver:   &driver{htmlTag: htmlTagIMG},
 		height:   80,
 		width:    220,

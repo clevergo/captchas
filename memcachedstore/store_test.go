@@ -19,7 +19,7 @@ func TestMain(m *testing.M) {
 }
 
 func TestPrefixOption(t *testing.T) {
-	s := &store{}
+	s := &Store{}
 	prefix := "foo"
 	Prefix(prefix)(s)
 	if s.prefix != prefix {
@@ -29,7 +29,7 @@ func TestPrefixOption(t *testing.T) {
 
 func TestGetKey(t *testing.T) {
 	prefix := "foo"
-	s := &store{prefix: prefix}
+	s := &Store{prefix: prefix}
 	key := "bar"
 	if s.getKey(key) != prefix+":"+key {
 		t.Errorf("expected key %s, got %s", prefix+":"+key, s.getKey(key))
@@ -39,7 +39,7 @@ func TestGetKey(t *testing.T) {
 func TestNew(t *testing.T) {
 	prefix := "foo"
 	expiration := int32(600)
-	s, _ := New(testClient, Prefix(prefix), Expiration(expiration)).(*store)
+	s := New(testClient, Prefix(prefix), Expiration(expiration))
 	if s.expiration != expiration {
 		t.Errorf("expected expiration %d, got %d", expiration, s.expiration)
 	}

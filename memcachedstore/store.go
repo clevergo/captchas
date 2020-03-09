@@ -6,35 +6,34 @@ package memcachedstore
 
 import (
 	"github.com/bradfitz/gomemcache/memcache"
-	"github.com/clevergo/captchas"
 )
 
 // Option is a function that receives a pointer of memcached store.
-type Option func(s *store)
+type Option func(s *Store)
 
 // Prefix sets the prefix of key.
 func Prefix(prefix string) Option {
-	return func(s *store) {
+	return func(s *Store) {
 		s.prefix = prefix
 	}
 }
 
 // Expiration sets the expiration of captcha.
 func Expiration(expiration int32) Option {
-	return func(s *store) {
+	return func(s *Store) {
 		s.expiration = expiration
 	}
 }
 
-type store struct {
+type Store struct {
 	client     *memcache.Client
 	prefix     string
 	expiration int32
 }
 
 // New returns a memcache store
-func New(client *memcache.Client, opts ...Option) captchas.Store {
-	s := &store{
+func New(client *memcache.Client, opts ...Option) *Store {
+	s := &Store{
 		client:     client,
 		prefix:     "captchas",
 		expiration: 600,
@@ -47,12 +46,12 @@ func New(client *memcache.Client, opts ...Option) captchas.Store {
 	return s
 }
 
-func (s *store) getKey(id string) string {
+func (s *Store) getKey(id string) string {
 	return s.prefix + ":" + id
 }
 
 // Get implements Store.Get.
-func (s *store) Get(id string, clear bool) (string, error) {
+func (s *Store) Get(id string, clear bool) (string, error) {
 	key := s.getKey(id)
 	item, err := s.client.Get(key)
 	if err != nil {
@@ -67,7 +66,7 @@ func (s *store) Get(id string, clear bool) (string, error) {
 }
 
 // Set implements Store.Get.
-func (s *store) Set(id, answer string) error {
+func (s *Store) Set(id, answer string) error {
 	item := &memcache.Item{
 		Key:        s.getKey(id),
 		Value:      []byte(answer),

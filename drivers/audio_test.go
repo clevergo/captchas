@@ -7,7 +7,7 @@ package drivers
 import "testing"
 
 func TestAudioLength(t *testing.T) {
-	a := &audio{}
+	a := &Audio{}
 	length := 8
 	AudioLength(length)(a)
 	if a.length != length {
@@ -16,7 +16,7 @@ func TestAudioLength(t *testing.T) {
 }
 
 func TestAudioLanguage(t *testing.T) {
-	a := &audio{}
+	a := &Audio{}
 	language := "zh"
 	AudioLangauge(language)(a)
 	if a.language != language {
@@ -25,12 +25,11 @@ func TestAudioLanguage(t *testing.T) {
 }
 
 func TestNewAudio(t *testing.T) {
-	d := NewAudio(
+	a := NewAudio(
 		AudioLength(4),
 		AudioLangauge("zh"),
 	)
 
-	a, _ := d.(*audio)
 	if a.length != 4 {
 		t.Errorf("expected length %d, got %d", 4, a.length)
 	}

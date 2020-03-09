@@ -7,7 +7,7 @@ package drivers
 import "testing"
 
 func TestDigitHeight(t *testing.T) {
-	d := &digit{}
+	d := &Digit{}
 	DigitHeight(4)(d)
 	if d.height != 4 {
 		t.Errorf("expected height %d, got %d", 4, d.height)
@@ -15,7 +15,7 @@ func TestDigitHeight(t *testing.T) {
 }
 
 func TestDigitWidth(t *testing.T) {
-	d := &digit{}
+	d := &Digit{}
 	DigitWidth(4)(d)
 	if d.width != 4 {
 		t.Errorf("expected width %d, got %d", 4, d.width)
@@ -23,7 +23,7 @@ func TestDigitWidth(t *testing.T) {
 }
 
 func TestDigitLength(t *testing.T) {
-	d := &digit{}
+	d := &Digit{}
 	DigitLength(4)(d)
 	if d.length != 4 {
 		t.Errorf("expected length %d, got %d", 4, d.length)
@@ -31,7 +31,7 @@ func TestDigitLength(t *testing.T) {
 }
 
 func TestDigitMaxSkew(t *testing.T) {
-	d := &digit{}
+	d := &Digit{}
 	DigitMaxSkew(0.78)(d)
 	if d.maxSkew != 0.78 {
 		t.Errorf("expected max skew %f, got %f", 0.78, d.maxSkew)
@@ -39,7 +39,7 @@ func TestDigitMaxSkew(t *testing.T) {
 }
 
 func TestDigitDotCount(t *testing.T) {
-	d := &digit{}
+	d := &Digit{}
 	DigitDotCount(4)(d)
 	if d.dotCount != 4 {
 		t.Errorf("expected dot count %d, got %d", 4, d.dotCount)
@@ -51,8 +51,7 @@ func TestNewDigit(t *testing.T) {
 		DigitHeight(4),
 	)
 
-	digit, _ := d.(*digit)
-	if digit.height != 4 {
-		t.Errorf("expected height %d, got %d", 4, digit.height)
+	if d.height != 4 {
+		t.Errorf("expected height %d, got %d", 4, d.height)
 	}
 }

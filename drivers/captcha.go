@@ -27,15 +27,15 @@ const (
 	htmlTagAudio = "audio"
 )
 
-type captcha struct {
+type Captcha struct {
 	id     string
 	answer string
 	item   base64Captcha.Item
 	tag    string
 }
 
-func newCaptcha(id, answer, tag string, item base64Captcha.Item) *captcha {
-	return &captcha{
+func newCaptcha(id, answer, tag string, item base64Captcha.Item) *Captcha {
+	return &Captcha{
 		id:     id,
 		answer: answer,
 		item:   item,
@@ -44,22 +44,22 @@ func newCaptcha(id, answer, tag string, item base64Captcha.Item) *captcha {
 }
 
 // ID implements Captcha.ID.
-func (c *captcha) ID() string {
+func (c *Captcha) ID() string {
 	return c.id
 }
 
 // ID implements Captcha.Answer.
-func (c *captcha) Answer() string {
+func (c *Captcha) Answer() string {
 	return c.answer
 }
 
 // ID implements Captcha.EncodeToString.
-func (c *captcha) EncodeToString() string {
+func (c *Captcha) EncodeToString() string {
 	return c.item.EncodeB64string()
 }
 
 // ID implements Captcha.HTMLField.
-func (c *captcha) HTMLField(fieldName string) template.HTML {
+func (c *Captcha) HTMLField(fieldName string) template.HTML {
 	buf := &bytes.Buffer{}
 	tmpl.Execute(buf, map[string]interface{}{
 		"captcha":   c,
@@ -68,10 +68,10 @@ func (c *captcha) HTMLField(fieldName string) template.HTML {
 	return template.HTML(buf.String())
 }
 
-func (c *captcha) MediaAttr() template.HTMLAttr {
+func (c *Captcha) MediaAttr() template.HTMLAttr {
 	return template.HTMLAttr(fmt.Sprintf(`src="%s"`, c.item.EncodeB64string()))
 }
 
-func (c *captcha) IsTagAudio() bool {
+func (c *Captcha) IsTagAudio() bool {
 	return c.tag == htmlTagAudio
 }

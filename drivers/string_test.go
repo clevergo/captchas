@@ -11,7 +11,7 @@ import (
 )
 
 func TestStringHeight(t *testing.T) {
-	s := &str{}
+	s := &Str{}
 	StringHeight(4)(s)
 	if s.height != 4 {
 		t.Errorf("expected height %d, got %d", 4, s.height)
@@ -19,7 +19,7 @@ func TestStringHeight(t *testing.T) {
 }
 
 func TestStringWidth(t *testing.T) {
-	s := &str{}
+	s := &Str{}
 	StringWidth(4)(s)
 	if s.width != 4 {
 		t.Errorf("expected width %d, got %d", 4, s.width)
@@ -27,7 +27,7 @@ func TestStringWidth(t *testing.T) {
 }
 
 func TestStringLength(t *testing.T) {
-	s := &str{}
+	s := &Str{}
 	StringLength(4)(s)
 	if s.length != 4 {
 		t.Errorf("expected length %d, got %d", 4, s.length)
@@ -35,7 +35,7 @@ func TestStringLength(t *testing.T) {
 }
 
 func TestStringFonts(t *testing.T) {
-	s := &str{}
+	s := &Str{}
 	fonts := []string{"wqy_microhei.ttc"}
 	StringFonts(fonts)(s)
 	if !reflect.DeepEqual(fonts, s.fonts) {
@@ -44,7 +44,7 @@ func TestStringFonts(t *testing.T) {
 }
 
 func TestStringSource(t *testing.T) {
-	s := &str{}
+	s := &Str{}
 	source := "foobar"
 	StringSource(source)(s)
 	if s.source != source {
@@ -53,7 +53,7 @@ func TestStringSource(t *testing.T) {
 }
 
 func TestStringNoiseCount(t *testing.T) {
-	s := &str{}
+	s := &Str{}
 	StringNoiseCount(4)(s)
 	if s.noiseCount != 4 {
 		t.Errorf("expected noise count %d, got %d", 4, s.noiseCount)
@@ -61,7 +61,7 @@ func TestStringNoiseCount(t *testing.T) {
 }
 
 func TestStringBGColor(t *testing.T) {
-	s := &str{}
+	s := &Str{}
 	color := &color.RGBA{1, 2, 3, 4}
 	StringBGColor(color)(s)
 	if !reflect.DeepEqual(color, s.bgColor) {
@@ -70,11 +70,10 @@ func TestStringBGColor(t *testing.T) {
 }
 
 func TestNewString(t *testing.T) {
-	d := NewString(
+	s := NewString(
 		StringLength(3),
 	)
 
-	s, _ := d.(*str)
 	if s.length != 3 {
 		t.Errorf("expected length %d, got %d", 3, s.length)
 	}

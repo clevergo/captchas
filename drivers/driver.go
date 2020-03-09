@@ -5,7 +5,6 @@
 package drivers
 
 import (
-	"github.com/clevergo/captchas"
 	"github.com/mojocn/base64Captcha"
 )
 
@@ -14,7 +13,7 @@ type driver struct {
 	htmlTag string
 }
 
-func (d *driver) Generate() (captchas.Captcha, error) {
+func (d *driver) Generate() (*Captcha, error) {
 	id, question, answer := d.driver.GenerateIdQuestionAnswer()
 	item, err := d.driver.DrawCaptcha(question)
 	if err != nil {

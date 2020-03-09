@@ -40,9 +40,8 @@ func TestCaptchaEncodeToString(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	shadowCaptcha, _ := c.(*captcha)
-	if c.EncodeToString() != shadowCaptcha.item.EncodeB64string() {
-		t.Errorf("expected base64 encode string %q, got %q", shadowCaptcha.item.EncodeB64string(), c.EncodeToString())
+	if c.EncodeToString() != c.item.EncodeB64string() {
+		t.Errorf("expected base64 encode string %q, got %q", c.item.EncodeB64string(), c.EncodeToString())
 	}
 }
 
@@ -53,10 +52,9 @@ func TestCaptchaMediaAttr(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	shadowCaptcha, _ := c.(*captcha)
-	expected := template.HTMLAttr(fmt.Sprintf(`src="%s"`, shadowCaptcha.item.EncodeB64string()))
-	if shadowCaptcha.MediaAttr() != expected {
-		t.Errorf("expected media attr %v, got %v", expected, shadowCaptcha.MediaAttr())
+	expected := template.HTMLAttr(fmt.Sprintf(`src="%s"`, c.item.EncodeB64string()))
+	if c.MediaAttr() != expected {
+		t.Errorf("expected media attr %v, got %v", expected, c.MediaAttr())
 	}
 }
 
@@ -78,12 +76,12 @@ func TestCaptchaHTMLField(t *testing.T) {
 }
 
 func TestCaptchaIsTagAudio(t *testing.T) {
-	imgCaptcha := &captcha{tag: htmlTagIMG}
+	imgCaptcha := &Captcha{tag: htmlTagIMG}
 	if imgCaptcha.IsTagAudio() {
 		t.Errorf("expected %t, got %t", true, imgCaptcha.IsTagAudio())
 	}
 
-	audioCaptcha := &captcha{tag: htmlTagAudio}
+	audioCaptcha := &Captcha{tag: htmlTagAudio}
 	if !audioCaptcha.IsTagAudio() {
 		t.Errorf("expected %t, got %t", true, audioCaptcha.IsTagAudio())
 	}

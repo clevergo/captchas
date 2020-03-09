@@ -11,7 +11,7 @@ import (
 )
 
 func TestChineseHeight(t *testing.T) {
-	c := &chinese{}
+	c := &Chinese{}
 	ChineseHeight(4)(c)
 	if c.height != 4 {
 		t.Errorf("expected height %d, got %d", 4, c.height)
@@ -19,7 +19,7 @@ func TestChineseHeight(t *testing.T) {
 }
 
 func TestChineseWidth(t *testing.T) {
-	c := &chinese{}
+	c := &Chinese{}
 	ChineseWidth(4)(c)
 	if c.width != 4 {
 		t.Errorf("expected width %d, got %d", 4, c.width)
@@ -27,7 +27,7 @@ func TestChineseWidth(t *testing.T) {
 }
 
 func TestChineseLength(t *testing.T) {
-	c := &chinese{}
+	c := &Chinese{}
 	ChineseLength(4)(c)
 	if c.length != 4 {
 		t.Errorf("expected length %d, got %d", 4, c.length)
@@ -35,7 +35,7 @@ func TestChineseLength(t *testing.T) {
 }
 
 func TestChineseFonts(t *testing.T) {
-	c := &chinese{}
+	c := &Chinese{}
 	fonts := []string{"wqy_microhei.ttc"}
 	ChineseFonts(fonts)(c)
 	if !reflect.DeepEqual(fonts, c.fonts) {
@@ -44,7 +44,7 @@ func TestChineseFonts(t *testing.T) {
 }
 
 func TestChineseSource(t *testing.T) {
-	c := &chinese{}
+	c := &Chinese{}
 	source := "foobar"
 	ChineseSource(source)(c)
 	if c.source != source {
@@ -53,7 +53,7 @@ func TestChineseSource(t *testing.T) {
 }
 
 func TestChineseNoiseCount(t *testing.T) {
-	c := &chinese{}
+	c := &Chinese{}
 	ChineseNoiseCount(4)(c)
 	if c.noiseCount != 4 {
 		t.Errorf("expected noise count %d, got %d", 4, c.noiseCount)
@@ -61,7 +61,7 @@ func TestChineseNoiseCount(t *testing.T) {
 }
 
 func TestChineseBGColor(t *testing.T) {
-	c := &chinese{}
+	c := &Chinese{}
 	color := &color.RGBA{1, 2, 3, 4}
 	ChineseBGColor(color)(c)
 	if !reflect.DeepEqual(color, c.bgColor) {
@@ -70,11 +70,10 @@ func TestChineseBGColor(t *testing.T) {
 }
 
 func TestNewChinese(t *testing.T) {
-	d := NewChinese(
+	c := NewChinese(
 		ChineseLength(3),
 	)
 
-	c, _ := d.(*chinese)
 	if c.length != 3 {
 		t.Errorf("expected length %d, got %d", 3, c.length)
 	}

@@ -7,49 +7,48 @@ package drivers
 import (
 	"image/color"
 
-	"github.com/clevergo/captchas"
 	"github.com/mojocn/base64Captcha"
 )
 
 // MathOption is a function that receives a pointer of math driver.
-type MathOption func(*math)
+type MathOption func(*Math)
 
 // MathHeight sets height.
 func MathHeight(height int) MathOption {
-	return func(m *math) {
+	return func(m *Math) {
 		m.height = height
 	}
 }
 
 // MathWidth sets width.
 func MathWidth(width int) MathOption {
-	return func(m *math) {
+	return func(m *Math) {
 		m.width = width
 	}
 }
 
 // MathNoiseCount sets noise count.
 func MathNoiseCount(count int) MathOption {
-	return func(m *math) {
+	return func(m *Math) {
 		m.noiseCount = count
 	}
 }
 
 // MathBGColor sets background color.
 func MathBGColor(color *color.RGBA) MathOption {
-	return func(m *math) {
+	return func(m *Math) {
 		m.bgColor = color
 	}
 }
 
 // MathFonts sets fonts.
 func MathFonts(fonts []string) MathOption {
-	return func(m *math) {
+	return func(m *Math) {
 		m.fonts = fonts
 	}
 }
 
-type math struct {
+type Math struct {
 	*driver
 	// captcha png height in pixel.
 	height int
@@ -64,8 +63,8 @@ type math struct {
 }
 
 // NewMath return a math driver.
-func NewMath(opts ...MathOption) captchas.Driver {
-	d := &math{
+func NewMath(opts ...MathOption) *Math {
+	d := &Math{
 		driver:     &driver{htmlTag: htmlTagIMG},
 		height:     80,
 		width:      220,

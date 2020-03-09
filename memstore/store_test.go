@@ -15,44 +15,40 @@ func TestNew(t *testing.T) {
 	gcInterval := time.Minute
 	s := New(Expiration(expiration), GCInterval(gcInterval))
 
-	mem, _ := s.(*store)
-	if mem.expiration != expiration {
-		t.Errorf("expected expiration %v, got %v", expiration, mem.expiration)
+	if s.expiration != expiration {
+		t.Errorf("expected expiration %v, got %v", expiration, s.expiration)
 	}
-	if mem.gcInterval != gcInterval {
-		t.Errorf("expected gcInterval %v, got %v", gcInterval, mem.gcInterval)
+	if s.gcInterval != gcInterval {
+		t.Errorf("expected gcInterval %v, got %v", gcInterval, s.gcInterval)
 	}
 }
 
 func TestStoreGet(t *testing.T) {
 	s := New()
-	_, err := s.Get("foo", true)
-	if err == nil {
-		t.Error("expected a non-nil error, got nil")
+	value, _ := s.Get("foo", true)
+	if value != "" {
+		t.Errorf("expected empty value, got %s", value)
 	}
 
-	err = s.Set("foo", "bar")
+	err := s.Set("foo", "bar")
 	if err != nil {
 		t.Fatalf("failed to set: %s", err)
 	}
 	for _, clear := range []bool{false, true} {
-		value, err := s.Get("foo", clear)
-		if err != nil {
-			t.Fatalf("expected non error, got %s", err)
-		}
+		value, _ := s.Get("foo", clear)
 		if value != "bar" {
 			t.Errorf("expected value %q, got %q", "bar", value)
 		}
 	}
 
-	_, err = s.Get("foo", true)
-	if err == nil {
-		t.Error("expected a non-nil error, got nil")
+	value, _ = s.Get("foo", true)
+	if value != "" {
+		t.Errorf("expected empty value, got %s", value)
 	}
 }
 
 func TestStoreDeleteExpired(t *testing.T) {
-	s := &store{
+	s := &Store{
 		mu: &sync.RWMutex{},
 		items: map[string]*item{
 			"expired": {int64(0), "expired"},

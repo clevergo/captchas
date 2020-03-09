@@ -5,39 +5,37 @@
 package redisstore
 
 import (
-	"fmt"
 	"time"
 
-	"github.com/clevergo/captchas"
 	"github.com/go-redis/redis/v7"
 )
 
 // Option is a function that receives a pointer of redis store.
-type Option func(s *store)
+type Option func(s *Store)
 
 // Prefix sets the prefix of key.
 func Prefix(prefix string) Option {
-	return func(s *store) {
+	return func(s *Store) {
 		s.prefix = prefix
 	}
 }
 
 // Expiration sets the expiration.
 func Expiration(expiration time.Duration) Option {
-	return func(s *store) {
+	return func(s *Store) {
 		s.expiration = expiration
 	}
 }
 
-type store struct {
+type Store struct {
 	client     *redis.Client
 	expiration time.Duration
 	prefix     string
 }
 
 // New returns a redis store.
-func New(client *redis.Client, opts ...Option) captchas.Store {
-	s := &store{
+func New(client *redis.Client, opts ...Option) *Store {
+	s := &Store{
 		client:     client,
 		prefix:     "captchas",
 		expiration: 10 * time.Minute,
@@ -50,12 +48,12 @@ func New(client *redis.Client, opts ...Option) captchas.Store {
 	return s
 }
 
-func (s *store) getKey(id string) string {
+func (s *Store) getKey(id string) string {
 	return s.prefix + ":" + id
 }
 
 // Get implements Store.Get.
-func (s *store) Get(id string, clear bool) (string, error) {
+func (s *Store) Get(id string, clear bool) (string, error) {
 	key := s.getKey(id)
 	tx := s.client.TxPipeline()
 	get := tx.Get(key)
@@ -69,12 +67,12 @@ func (s *store) Get(id string, clear bool) (string, error) {
 	}
 	val, err := get.Result()
 	if err != nil {
-		return "", fmt.Errorf("failed to get key: %s", key)
+		return "", err
 	}
 
 	if clear {
 		if _, err = del.Result(); err != nil {
-			return "", fmt.Errorf("failed to delete key: %s", key)
+			return "", err
 		}
 	}
 
@@ -82,11 +80,11 @@ func (s *store) Get(id string, clear bool) (string, error) {
 }
 
 // Set implements Store.Set.
-func (s *store) Set(id string, value string) error {
+func (s *Store) Set(id string, value string) error {
 	key := s.getKey(id)
 	_, err := s.client.Set(key, value, s.expiration).Result()
 	if err != nil {
-		return fmt.Errorf("failed to set key: %s", key)
+		return err
 	}
 	return nil
 }

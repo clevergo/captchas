@@ -11,7 +11,7 @@ import (
 )
 
 func TestMathHeight(t *testing.T) {
-	m := &math{}
+	m := &Math{}
 	MathHeight(4)(m)
 	if m.height != 4 {
 		t.Errorf("expected height %d, got %d", 4, m.height)
@@ -19,7 +19,7 @@ func TestMathHeight(t *testing.T) {
 }
 
 func TestMathWidth(t *testing.T) {
-	m := &math{}
+	m := &Math{}
 	MathWidth(4)(m)
 	if m.width != 4 {
 		t.Errorf("expected width %d, got %d", 4, m.width)
@@ -27,7 +27,7 @@ func TestMathWidth(t *testing.T) {
 }
 
 func TestMathFonts(t *testing.T) {
-	m := &math{}
+	m := &Math{}
 	fonts := []string{"wqy_microhei.ttc"}
 	MathFonts(fonts)(m)
 	if !reflect.DeepEqual(fonts, m.fonts) {
@@ -36,7 +36,7 @@ func TestMathFonts(t *testing.T) {
 }
 
 func TestMathNoiseCount(t *testing.T) {
-	m := &math{}
+	m := &Math{}
 	MathNoiseCount(4)(m)
 	if m.noiseCount != 4 {
 		t.Errorf("expected noise count %d, got %d", 4, m.noiseCount)
@@ -44,7 +44,7 @@ func TestMathNoiseCount(t *testing.T) {
 }
 
 func TestMathBGColor(t *testing.T) {
-	m := &math{}
+	m := &Math{}
 	color := &color.RGBA{1, 2, 3, 4}
 	MathBGColor(color)(m)
 	if !reflect.DeepEqual(color, m.bgColor) {
@@ -53,11 +53,10 @@ func TestMathBGColor(t *testing.T) {
 }
 
 func TestNewMath(t *testing.T) {
-	d := NewMath(
+	m := NewMath(
 		MathHeight(3),
 	)
 
-	m, _ := d.(*math)
 	if m.height != 3 {
 		t.Errorf("expected height %d, got %d", 3, m.height)
 	}
