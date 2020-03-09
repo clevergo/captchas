@@ -7,6 +7,8 @@ package memstore
 import (
 	"sync"
 	"time"
+
+	"github.com/clevergo/captchas"
 )
 
 // Option is a function that receives a pointer of store.
@@ -59,43 +61,46 @@ func New(opts ...Option) *Store {
 // Get implements Store.Get.
 func (s *Store) Get(id string, clear bool) (string, error) {
 	if clear {
-		item := s.getAndDel(id)
-		if item == nil {
-			return "", nil
+		item, err := s.getAndDel(id)
+		if err != nil {
+			return "", err
 		}
 		return item.answer, nil
 	}
 
 	s.mu.RLock()
 	defer s.mu.RUnlock()
-	item := s.get(id)
-	if item == nil {
-		return "", nil
+	item, err := s.get(id)
+	if err != nil {
+		return "", err
 	}
 	return item.answer, nil
 }
 
-func (s *Store) get(id string) *item {
+func (s *Store) get(id string) (*item, error) {
 	item, ok := s.items[id]
-	if ok &&  time.Now().UnixNano() < item.expiration {
-		return item
+	if !ok {
+		return nil, captchas.ErrCaptchaIncorrect
+	}
+	if time.Now().UnixNano() > item.expiration {
+		return nil, captchas.ErrCaptchaExpired
 	}
 
-	return nil
+	return item, nil
 }
 
-func (s *Store) getAndDel(id string) *item {
+func (s *Store) getAndDel(id string) (*item, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	item := s.get(id)
-	if item == nil {
-		return nil
+	item, err := s.get(id)
+	if err != nil {
+		return nil, err
 	}
 
 	delete(s.items, id)
 
-	return item
+	return item, nil
 }
 
 // Set implements Store.Set.
