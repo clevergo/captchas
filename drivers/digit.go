@@ -46,6 +46,7 @@ func DigitDotCount(count int) DigitOption {
 	}
 }
 
+// Digit is a digit driver.
 type Digit struct {
 	*driver
 	// captcha png height in pixel.

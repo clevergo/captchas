@@ -62,6 +62,7 @@ func ChineseFonts(fonts []string) ChineseOption {
 	}
 }
 
+// Chinese is a chinese driver.
 type Chinese struct {
 	*driver
 	// captcha png height in pixel.

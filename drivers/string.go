@@ -62,6 +62,7 @@ func StringFonts(fonts []string) StringOption {
 	}
 }
 
+// Str is a string driver.
 type Str struct {
 	*driver
 	// captcha png height in pixel.

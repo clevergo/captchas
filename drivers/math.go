@@ -48,6 +48,7 @@ func MathFonts(fonts []string) MathOption {
 	}
 }
 
+// Math is a math driver.
 type Math struct {
 	*driver
 	// captcha png height in pixel.

@@ -25,6 +25,7 @@ func Expiration(expiration int32) Option {
 	}
 }
 
+// Store is a memcached store.
 type Store struct {
 	client     *memcache.Client
 	prefix     string

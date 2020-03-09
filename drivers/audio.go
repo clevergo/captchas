@@ -25,6 +25,7 @@ func AudioLangauge(language string) AudioOption {
 	}
 }
 
+// Audio is an audio driver.
 type Audio struct {
 	*driver
 	// number of digits in captcha solution.

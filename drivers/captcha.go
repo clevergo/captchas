@@ -27,6 +27,7 @@ const (
 	htmlTagAudio = "audio"
 )
 
+// Captcha implements captchas.Captcha interface.
 type Captcha struct {
 	id     string
 	answer string
@@ -48,17 +49,17 @@ func (c *Captcha) ID() string {
 	return c.id
 }
 
-// ID implements Captcha.Answer.
+// Answer implements Captcha.Answer.
 func (c *Captcha) Answer() string {
 	return c.answer
 }
 
-// ID implements Captcha.EncodeToString.
+// EncodeToString implements Captcha.EncodeToString.
 func (c *Captcha) EncodeToString() string {
 	return c.item.EncodeB64string()
 }
 
-// ID implements Captcha.HTMLField.
+// HTMLField implements Captcha.HTMLField.
 func (c *Captcha) HTMLField(fieldName string) template.HTML {
 	buf := &bytes.Buffer{}
 	tmpl.Execute(buf, map[string]interface{}{
@@ -68,10 +69,12 @@ func (c *Captcha) HTMLField(fieldName string) template.HTML {
 	return template.HTML(buf.String())
 }
 
+// MediaAttr returns template.HTMLAttr.
 func (c *Captcha) MediaAttr() template.HTMLAttr {
 	return template.HTMLAttr(fmt.Sprintf(`src="%s"`, c.item.EncodeB64string()))
 }
 
+// IsTagAudio returns a bool value indicates whehter the tag is audio.
 func (c *Captcha) IsTagAudio() bool {
 	return c.tag == htmlTagAudio
 }

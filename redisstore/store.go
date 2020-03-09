@@ -27,6 +27,7 @@ func Expiration(expiration time.Duration) Option {
 	}
 }
 
+// Store is a redis store.
 type Store struct {
 	client     *redis.Client
 	expiration time.Duration

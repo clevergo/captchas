@@ -33,6 +33,7 @@ type item struct {
 	answer     string
 }
 
+// Store is a memory store.
 type Store struct {
 	mu         *sync.RWMutex
 	expiration time.Duration
