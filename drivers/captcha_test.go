@@ -40,8 +40,9 @@ func TestCaptchaEncodeToString(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if c.EncodeToString() != c.item.EncodeB64string() {
-		t.Errorf("expected base64 encode string %q, got %q", c.item.EncodeB64string(), c.EncodeToString())
+	shadowC, _ := c.(*Captcha)
+	if c.EncodeToString() != shadowC.item.EncodeB64string() {
+		t.Errorf("expected base64 encode string %q, got %q", shadowC.item.EncodeB64string(), c.EncodeToString())
 	}
 }
 
@@ -52,9 +53,10 @@ func TestCaptchaMediaAttr(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	expected := template.HTMLAttr(fmt.Sprintf(`src="%s"`, c.item.EncodeB64string()))
-	if c.MediaAttr() != expected {
-		t.Errorf("expected media attr %v, got %v", expected, c.MediaAttr())
+	shadowC, _ := c.(*Captcha)
+	expected := template.HTMLAttr(fmt.Sprintf(`src="%s"`, shadowC.item.EncodeB64string()))
+	if shadowC.MediaAttr() != expected {
+		t.Errorf("expected media attr %v, got %v", expected, shadowC.MediaAttr())
 	}
 }
 
