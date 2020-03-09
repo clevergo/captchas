@@ -10,13 +10,13 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/bradfitz/gomemcache/memcache"
 	"github.com/clevergo/captchas"
 	"github.com/clevergo/captchas/drivers"
+	"github.com/clevergo/captchas/memcachedstore"
 	"github.com/clevergo/captchas/memstore"
-	//"github.com/clevergo/captchas/redisstore"
-	//"github.com/go-redis/redis/v7"
-	//"github.com/bradfitz/gomemcache/memcache"
-	//"github.com/clevergo/captchas/memcachedstore"
+	"github.com/clevergo/captchas/redisstore"
+	"github.com/go-redis/redis/v7"
 )
 
 var (
@@ -27,41 +27,45 @@ var (
 	apiTmpl   = template.Must(template.ParseFiles("layout.tmpl", "api.tmpl"))
 )
 
-func main() {
-	flag.Parse()
+func redisStore() *redisstore.Store {
+	client := redis.NewClient(&redis.Options{
+		Addr:     "localhost:6379",
+		Password: "",
+		DB:       0,
+	})
+	_, err := client.Ping().Result()
+	if err != nil {
+		panic(err)
+	}
+	return redisstore.New(
+		client,
+		redisstore.Expiration(10*time.Minute), // key expiration, optional.
+		redisstore.Prefix("captchas"),         // key prefix, optional.
+	)
+}
 
-	store = memstore.New(
+func memcachedStore() *memcachedstore.Store {
+	memcachedClient := memcache.New("localhost:11211")
+	return memcachedstore.New(
+		memcachedClient,
+		memcachedstore.Expiration(int32(600)), // captcha expiration, optional.
+		memcachedstore.Prefix("captchas"),     // key prefix, optional.
+	)
+}
+
+func memStore() *memstore.Store {
+	return memstore.New(
 		memstore.Expiration(10*time.Minute), // expiration, optional.
 		memstore.GCInterval(time.Minute),    // garbage collection interval, optional.
 	)
+}
 
-	// redis store
-	/*
-		client := redis.NewClient(&redis.Options{
-			Addr:     "localhost:6379",
-			Password: "",
-			DB:       0,
-		})
-		_, err := client.Ping().Result()
-		if err != nil {
-			panic(err)
-		}
-		store = redisstore.New(
-			client,
-			redisstore.Expiration(10*time.Minute), // key expiration, optional.
-			redisstore.Prefix("captchas"),         // key prefix, optional.
-		)
-	*/
+func main() {
+	flag.Parse()
 
-	// memcached store
-	/*
-		memcachedClient := memcache.New("localhost:11211")
-		store = memcachedstore.New(
-			memcachedClient,
-			memcachedstore.Expiration(int32(600)), // captcha expiration, optional.
-			memcachedstore.Prefix("captchas"),     // key prefix, optional.
-		)
-	*/
+	store = redisStore()     // redis store
+	store = memcachedStore() // memcached store
+	store = memStore()       // memory store
 
 	managerOpts := []captchas.Option{
 		// disable case sensitive, enabled by default, it will effects on string driver.
