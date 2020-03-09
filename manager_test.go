@@ -112,8 +112,8 @@ func TestManagerVerify(t *testing.T) {
 	m := New(store, &testDriver{})
 	for _, clear := range []bool{true, false} {
 		err1 := m.Verify("foo", "bar", clear)
-		if !reflect.DeepEqual(err1, ErrIncorrectCaptcha) {
-			t.Errorf("expected err %v, got %v", ErrIncorrectCaptcha, err1)
+		if !reflect.DeepEqual(err1, ErrCaptchaIncorrect) {
+			t.Errorf("expected err %v, got %v", ErrCaptchaIncorrect, err1)
 		}
 	}
 }

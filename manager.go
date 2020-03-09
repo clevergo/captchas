@@ -77,7 +77,7 @@ func (m *Manager) Verify(id, actual string, clear bool) error {
 		return nil
 	}
 
-	return ErrIncorrectCaptcha
+	return ErrCaptchaIncorrect
 }
 
 func (m *Manager) isEqual(actual, answer string) bool {
