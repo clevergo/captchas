@@ -61,8 +61,8 @@ func (m *Manager) Get(id string, clear bool) (string, error) {
 
 // Errors
 var (
-	ErrIncorrectCaptcha = errors.New("incorrect captcha")
-	ErrExpiredCaptcha   = errors.New("expired captcha")
+	ErrCaptchaIncorrect = errors.New("captcha is incorrect")
+	ErrCaptchaExpired   = errors.New("captcha is expired")
 )
 
 // Verify verifies whether the given actual value is equal to the
