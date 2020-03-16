@@ -70,6 +70,7 @@ func NewMath(opts ...MathOption) *Math {
 		height:     80,
 		width:      220,
 		noiseCount: 0,
+		fonts:      []string{"wqy-microhei.ttc"},
 	}
 
 	for _, f := range opts {
