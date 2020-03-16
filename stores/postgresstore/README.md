@@ -1,0 +1,22 @@
+# PostgreSQL Store for Captchas
+
+```shell
+$ go get github.com/clevergo/captchas/stores/postgresstore
+```
+
+```go
+import (
+	"github.com/clevergo/captchas/stores/dbstore"
+	"github.com/clevergo/captchas/stores/postgresstore"
+	_ "github.com/lib/pq"
+)
+```
+
+```go
+store := postgresstore.New(
+	dbstore.Expiration(10*time.Minute), // captcha expiration, optional.
+	dbstore.GCInterval(time.Minute), // garbage collection interval to delete expired captcha, optional.
+	dbstore.TableName("captchas"), // table name, optional.
+	dbstore.Category("default"), // category, optional.
+)
+```

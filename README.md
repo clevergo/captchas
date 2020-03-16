@@ -19,6 +19,9 @@ Base64 Captchas Manager, supports multiple [drivers](#drivers) and [stores](#sto
 - [Memory Store](stores/memstore)
 - [Redis Store](stores/redisstore)
 - [Memcached Store](stores/memcachedstore)
+- [MySQL Store](stores/mysqlstore)
+- [SQLite3 Store](stores/sqlite3store)
+- [PostgreSQL Store](stores/postgresstore)
 - Add your store here by PR or [request a new store](https://github.com/clevergo/captchas/issues/new).
 
 ## Usage
