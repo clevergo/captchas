@@ -10,10 +10,12 @@ import (
 	"github.com/clevergo/captchas/stores/dbstore"
 )
 
+// Store is a Sqlite3 store.
 type Store struct {
 	*dbstore.Store
 }
 
+// New returns store instance.
 func New(db *sql.DB, opts ...dbstore.Option) *Store {
 	return &Store{dbstore.New(db, dbstore.CommonDialect, opts...)}
 }
