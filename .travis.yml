@@ -8,12 +8,15 @@ go:
 services:
   - memcached
   - redis-server
+  - mysql
 jobs:
   allow_failures:
     - go: master
   fast_finish: true
 before_install:
   - go get github.com/mattn/goveralls
+  - mysql -e 'CREATE DATABASE test;'
+  - mysql -uroot --password="" test < stores/mysqlstore/migrations/1584366110_create_captchas_table.sql
 script:
   - go test -v -covermode=count -coverprofile=coverage.out ./...
   - go vet ./...
