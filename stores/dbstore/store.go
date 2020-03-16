@@ -44,6 +44,13 @@ func Category(category string) Option {
 	}
 }
 
+// TableName sets captcha table name.
+func TableName(name string) Option {
+	return func(s *Store) {
+		s.tableName = name
+	}
+}
+
 // Store is a database store.
 type Store struct {
 	db         *sql.DB
