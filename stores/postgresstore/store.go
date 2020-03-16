@@ -22,10 +22,12 @@ func New(db *sql.DB, opts ...dbstore.Option) *Store {
 type dialect struct {
 }
 
+// BindVar implements Dialect.BindVar.
 func (d dialect) BindVar(i int) string {
 	return fmt.Sprintf("$%d", i)
 }
 
+// Quote implements Dialect.Quote.
 func (d dialect) Quote(key string) string {
 	return fmt.Sprintf(`"%s"`, key)
 }
