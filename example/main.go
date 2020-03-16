@@ -13,9 +13,9 @@ import (
 	"github.com/bradfitz/gomemcache/memcache"
 	"github.com/clevergo/captchas"
 	"github.com/clevergo/captchas/drivers"
-	"github.com/clevergo/captchas/memcachedstore"
-	"github.com/clevergo/captchas/memstore"
-	"github.com/clevergo/captchas/redisstore"
+	"github.com/clevergo/captchas/stores/memcachedstore"
+	"github.com/clevergo/captchas/stores/memstore"
+	"github.com/clevergo/captchas/stores/redisstore"
 	"github.com/go-redis/redis/v7"
 )
 
