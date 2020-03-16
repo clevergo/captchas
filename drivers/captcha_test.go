@@ -70,10 +70,10 @@ func TestCaptchaHTMLField(t *testing.T) {
 	fieldName := "captcha_id"
 	content := string(c.HTMLField(fieldName))
 	if !strings.Contains(content, `name="`+fieldName+`"`) {
-		t.Errorf("HTML output doesn't contians input field")
+		t.Errorf("HTML output doesn't contains input field")
 	}
 	if !strings.Contains(content, `src="`+c.EncodeToString()+`"`) {
-		t.Errorf("HTML output doesn't contians media field")
+		t.Errorf("HTML output doesn't contains media field")
 	}
 }
 
