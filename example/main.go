@@ -63,9 +63,9 @@ func memStore() *memstore.Store {
 func main() {
 	flag.Parse()
 
-	store = redisStore()     // redis store
-	store = memcachedStore() // memcached store
-	store = memStore()       // memory store
+	//store = redisStore()     // redis store
+	//store = memcachedStore() // memcached store
+	store = memStore() // memory store
 
 	managerOpts := []captchas.Option{
 		// disable case sensitive, enabled by default, it will effects on string driver.
