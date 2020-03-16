@@ -1,4 +1,4 @@
-module github.com/clevergo/captchas/memstore
+module github.com/clevergo/captchas/stores/memstore
 
 go 1.14
 

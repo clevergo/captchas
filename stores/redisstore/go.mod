@@ -1,4 +1,4 @@
-module github.com/clevergo/captchas/redisstore
+module github.com/clevergo/captchas/stores/redisstore
 
 go 1.14
 
