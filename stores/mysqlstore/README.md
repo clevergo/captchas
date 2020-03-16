@@ -1,5 +1,7 @@
 # MySQL Store for Captchas
 
+Firstly, you need to create a captcha table, [migration](migrations/1584366110_create_captchas_table.sql).
+
 ```shell
 $ go get github.com/clevergo/captchas/stores/mysqlstore
 ```
