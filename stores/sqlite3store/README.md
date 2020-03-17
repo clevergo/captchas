@@ -15,7 +15,12 @@ import (
 ```
 
 ```go
+db, err := sql.Open("sqlite3", "./data.db")
+if err != nil {
+	// ...
+}
 store := sqlite3store.New(
+	db,
 	dbstore.Expiration(10*time.Minute), // captcha expiration, optional.
 	dbstore.GCInterval(time.Minute), // garbage collection interval to delete expired captcha, optional.
 	dbstore.TableName("captchas"), // table name, optional.

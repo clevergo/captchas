@@ -15,7 +15,12 @@ import (
 ```
 
 ```go
+db, err := sql.Open("postgres", "")
+if err != nil {
+	// ...
+}
 store := postgresstore.New(
+	db,
 	dbstore.Expiration(10*time.Minute), // captcha expiration, optional.
 	dbstore.GCInterval(time.Minute), // garbage collection interval to delete expired captcha, optional.
 	dbstore.TableName("captchas"), // table name, optional.
