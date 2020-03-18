@@ -19,7 +19,7 @@ client := redis.NewClient(&redis.Options{
 })
 store := redisstore.New(
 	client,
-	redisstore.Expiration(expiration), // captcha expiration, optional.
-	redisstore.Prefix("caotchas"), // redis key prefix, optional.
+	redisstore.Expiration(10*time.Minute), // captcha expiration, optional.
+	redisstore.Prefix("captchas"), // redis key prefix, optional.
 )
 ```
