@@ -8,6 +8,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/clevergo/captchas"
 	"github.com/go-redis/redis/v7"
 )
 
@@ -78,6 +79,9 @@ func TestStoreGet(t *testing.T) {
 	_, err = s.Get("foo", true)
 	if err == nil {
 		t.Error("expected a non-nil error, got nil")
+	}
+	if err != captchas.ErrCaptchaIncorrect {
+		t.Errorf("expected error %v, got %v", captchas.ErrCaptchaIncorrect, err)
 	}
 }
 

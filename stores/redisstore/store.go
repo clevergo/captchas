@@ -65,16 +65,16 @@ func (s *Store) Get(id string, clear bool) (string, error) {
 	}
 	_, err := tx.Exec()
 	if err != nil {
-		return "", err
+		return "", s.handleError(err)
 	}
 	val, err := get.Result()
 	isNil := false
 	if err != nil {
 		isNil = err == redis.Nil
-		if isNil {
+		if err == redis.Nil {
 			return "", captchas.ErrCaptchaIncorrect
 		}
-		return "", err
+		return "", s.handleError(err)
 	}
 
 	if clear && !isNil {
@@ -94,4 +94,12 @@ func (s *Store) Set(id string, value string) error {
 		return err
 	}
 	return nil
+}
+
+func (s *Store) handleError(err error) error {
+	if err == redis.Nil {
+		return captchas.ErrCaptchaIncorrect
+	}
+
+	return err
 }
