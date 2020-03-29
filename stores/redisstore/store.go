@@ -7,6 +7,7 @@ package redisstore
 import (
 	"time"
 
+	"github.com/clevergo/captchas"
 	"github.com/go-redis/redis/v7"
 )
 
@@ -67,11 +68,16 @@ func (s *Store) Get(id string, clear bool) (string, error) {
 		return "", err
 	}
 	val, err := get.Result()
+	isNil := false
 	if err != nil {
+		isNil = err == redis.Nil
+		if isNil {
+			return "", captchas.ErrCaptchaIncorrect
+		}
 		return "", err
 	}
 
-	if clear {
+	if clear && !isNil {
 		if _, err = del.Result(); err != nil {
 			return "", err
 		}
