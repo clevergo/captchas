@@ -26,12 +26,7 @@ Base64 Captchas Manager, supports multiple [drivers](#drivers) and [stores](#sto
 
 ## Usage
 
-Preview: https://captcha.clevergo.tech/.
-
-```shell
-$ cd example
-$ go run main.go
-```
+Checkout [example](https://github.com/clevergo/examples/tree/master/captchas) for details.
 
 ### Quick Start
 
