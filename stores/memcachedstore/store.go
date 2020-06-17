@@ -5,6 +5,9 @@
 package memcachedstore
 
 import (
+	"context"
+
+	"clevergo.tech/captchas"
 	"github.com/bradfitz/gomemcache/memcache"
 )
 
@@ -32,6 +35,8 @@ type Store struct {
 	expiration int32
 }
 
+var _ captchas.Store = New(nil)
+
 // New returns a memcache store
 func New(client *memcache.Client, opts ...Option) *Store {
 	s := &Store{
@@ -52,7 +57,7 @@ func (s *Store) getKey(id string) string {
 }
 
 // Get implements Store.Get.
-func (s *Store) Get(id string, clear bool) (string, error) {
+func (s *Store) Get(ctx context.Context, id string, clear bool) (string, error) {
 	key := s.getKey(id)
 	item, err := s.client.Get(key)
 	if err != nil {
@@ -67,7 +72,7 @@ func (s *Store) Get(id string, clear bool) (string, error) {
 }
 
 // Set implements Store.Get.
-func (s *Store) Set(id, answer string) error {
+func (s *Store) Set(ctx context.Context, id, answer string) error {
 	item := &memcache.Item{
 		Key:        s.getKey(id),
 		Value:      []byte(answer),
