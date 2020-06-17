@@ -8,7 +8,7 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/clevergo/captchas/stores/dbstore"
+	"clevergo.tech/captchas/stores/dbstore"
 )
 
 // Store is a PostgreSQL store.

@@ -9,7 +9,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/clevergo/captchas"
+	"clevergo.tech/captchas"
 )
 
 type item struct {

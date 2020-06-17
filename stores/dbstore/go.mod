@@ -1,5 +1,5 @@
-module github.com/clevergo/captchas/stores/dbstore
+module clevergo.tech/captchas/stores/dbstore
 
 go 1.14
 
-require github.com/clevergo/captchas v0.3.2
+require clevergo.tech/captchas v0.1.0

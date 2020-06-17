@@ -2,12 +2,12 @@
 # Redis Store for Captchas
 
 ```shell
-$ go get github.com/clevergo/captchas/stores/redisstore
+$ go get clevergo.tech/captchas/stores/redisstore
 ```
 
 ```go
 import (
-    "github.com/clevergo/captchas/stores/redisstore"
+    "clevergo.tech/captchas/stores/redisstore"
     "github.com/go-redis/redis/v7"
 )
 ```

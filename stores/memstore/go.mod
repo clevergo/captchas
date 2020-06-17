@@ -1,5 +1,5 @@
-module github.com/clevergo/captchas/stores/memstore
+module clevergo.tech/captchas/stores/memstore
 
 go 1.14
 
-require github.com/clevergo/captchas v0.3.1
+require clevergo.tech/captchas v0.1.0

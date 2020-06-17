@@ -5,7 +5,7 @@
 package drivers
 
 import (
-	"github.com/clevergo/captchas"
+	"clevergo.tech/captchas"
 	"github.com/mojocn/base64Captcha"
 )
 

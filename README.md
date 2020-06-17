@@ -37,9 +37,9 @@ $ go run main.go
 ### Quick Start
 
 ```shell
-$ go get github.com/clevergo/captchas \
-	github.com/clevergo/captchas/drivers \
-	github.com/clevergo/captchas/stores/memstore
+$ go get clevergo.tech/captchas \
+	clevergo.tech/captchas/drivers \
+	clevergo.tech/captchas/stores/memstore
 ```
 
 ```go
@@ -53,9 +53,9 @@ import (
 	"net/http"
 	"text/template"
 
-	"github.com/clevergo/captchas"
-	"github.com/clevergo/captchas/drivers"
-	"github.com/clevergo/captchas/stores/memstore"
+	"clevergo.tech/captchas"
+	"clevergo.tech/captchas/drivers"
+	"clevergo.tech/captchas/stores/memstore"
 )
 
 var (

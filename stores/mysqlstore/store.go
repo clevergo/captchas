@@ -7,7 +7,7 @@ package mysqlstore
 import (
 	"database/sql"
 
-	"github.com/clevergo/captchas/stores/dbstore"
+	"clevergo.tech/captchas/stores/dbstore"
 )
 
 // Store is a MySQL store.

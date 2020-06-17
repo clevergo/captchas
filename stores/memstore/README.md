@@ -1,7 +1,7 @@
 # Memory Store for Captchas
 
 ```shell
-$ go get github.com/clevergo/captchas/stores/memstore
+$ go get clevergo.tech/captchas/stores/memstore
 ```
 
 ```go

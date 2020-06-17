@@ -7,7 +7,7 @@ package sqlite3store
 import (
 	"database/sql"
 
-	"github.com/clevergo/captchas/stores/dbstore"
+	"clevergo.tech/captchas/stores/dbstore"
 )
 
 // Store is a Sqlite3 store.

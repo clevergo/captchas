@@ -1,11 +1,11 @@
 # Captchas Drivers
 
 ```shell
-$ go get github.com/clevergo/captchas/drivers
+$ go get clevergo.tech/captchas/drivers
 ```
 
 ```go
-import "go get github.com/clevergo/captchas/drivers"
+import "go get clevergo.tech/captchas/drivers"
 ```
 
 ## Digit

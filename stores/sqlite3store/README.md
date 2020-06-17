@@ -3,13 +3,13 @@
 Firstly, you need to create a captcha table, [migration](migrations/1584366110_create_captchas_table.sql).
 
 ```shell
-$ go get github.com/clevergo/captchas/stores/sqlite3store
+$ go get clevergo.tech/captchas/stores/sqlite3store
 ```
 
 ```go
 import (
-	"github.com/clevergo/captchas/stores/dbstore"
-	"github.com/clevergo/captchas/stores/sqlite3store"
+	"clevergo.tech/captchas/stores/dbstore"
+	"clevergo.tech/captchas/stores/sqlite3store"
 	_ "github.com/mattn/go-sqlite3"
 )
 ```

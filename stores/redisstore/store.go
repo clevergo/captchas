@@ -7,7 +7,7 @@ package redisstore
 import (
 	"time"
 
-	"github.com/clevergo/captchas"
+	"clevergo.tech/captchas"
 	"github.com/go-redis/redis/v7"
 )
 

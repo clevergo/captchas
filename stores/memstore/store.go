@@ -8,7 +8,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/clevergo/captchas"
+	"clevergo.tech/captchas"
 )
 
 // Option is a function that receives a pointer of store.

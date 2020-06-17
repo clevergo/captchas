@@ -1,8 +1,8 @@
-module github.com/clevergo/captchas/stores/redisstore
+module clevergo.tech/captchas/stores/redisstore
 
 go 1.14
 
 require (
-	github.com/clevergo/captchas v0.3.2
+	clevergo.tech/captchas v0.1.0
 	github.com/go-redis/redis/v7 v7.2.0
 )

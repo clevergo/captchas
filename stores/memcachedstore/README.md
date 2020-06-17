@@ -1,13 +1,13 @@
 # Memcached Store for Captchas
 
 ```shell
-$ go get github.com/clevergo/captchas/stores/memcachedstore
+$ go get clevergo.tech/captchas/stores/memcachedstore
 ```
 
 ```go
 import (
+	"clevergo.tech/captchas/stores/memcachedstore"
 	"github.com/bradfitz/gomemcache/memcache"
-	"github.com/clevergo/captchas/stores/memcachedstore"
 )
 ```
 
