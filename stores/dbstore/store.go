@@ -5,11 +5,13 @@
 package dbstore
 
 import (
+	"context"
 	"database/sql"
-	"fmt"
+	"log"
 	"time"
 
 	"clevergo.tech/captchas"
+	"github.com/doug-martin/goqu/v9"
 )
 
 type item struct {
@@ -54,15 +56,17 @@ func TableName(name string) Option {
 // Store is a database store.
 type Store struct {
 	db         *sql.DB
-	dialect    Dialect
+	dialect    goqu.DialectWrapper
 	tableName  string
 	category   string
 	expiration time.Duration
 	gcInterval time.Duration
 }
 
+var _ captchas.Store = New(nil, goqu.DialectWrapper{})
+
 // New returns a db store.
-func New(db *sql.DB, dialect Dialect, opts ...Option) *Store {
+func New(db *sql.DB, dialect goqu.DialectWrapper, opts ...Option) *Store {
 	s := &Store{
 		db:         db,
 		dialect:    dialect,
@@ -82,17 +86,17 @@ func New(db *sql.DB, dialect Dialect, opts ...Option) *Store {
 }
 
 // Get implements Store.Get.
-func (s *Store) Get(id string, clear bool) (string, error) {
-	stat := fmt.Sprintf(
-		"SELECT %s, %s, %s FROM %s WHERE id=%s AND category=%s",
-		s.dialect.Quote("id"),
-		s.dialect.Quote("answer"),
-		s.dialect.Quote("expires_in"),
-		s.dialect.Quote(s.tableName),
-		s.dialect.BindVar(1),
-		s.dialect.BindVar(2),
-	)
-	row := s.db.QueryRow(stat, id, s.category)
+func (s *Store) Get(ctx context.Context, id string, clear bool) (string, error) {
+	query, args, err := s.dialect.From(s.tableName).
+		Select("id", "answer", "expires_in").
+		Where(goqu.Ex{
+			"id":       id,
+			"category": s.category,
+		}).ToSQL()
+	if err != nil {
+		return "", err
+	}
+	row := s.db.QueryRowContext(ctx, query, args...)
 	if row == nil {
 		return "", captchas.ErrCaptchaIncorrect
 	}
@@ -108,14 +112,15 @@ func (s *Store) Get(id string, clear bool) (string, error) {
 	}
 
 	if clear {
-		stat := fmt.Sprintf(
-			"DELETE FROM %s WHERE id=%s AND category=%s",
-			s.dialect.Quote(s.tableName),
-			s.dialect.BindVar(1),
-			s.dialect.BindVar(2),
-		)
-		_, err := s.db.Exec(stat, id, s.category)
+		query, args, err = s.dialect.Delete(s.tableName).
+			Where(goqu.Ex{
+				"id":       id,
+				"category": s.category,
+			}).ToSQL()
 		if err != nil {
+			return "", err
+		}
+		if _, err := s.db.ExecContext(ctx, query, args...); err != nil {
 			return "", err
 		}
 	}
@@ -124,23 +129,21 @@ func (s *Store) Get(id string, clear bool) (string, error) {
 }
 
 // Set implements Store.Set.
-func (s *Store) Set(id, answer string) error {
+func (s *Store) Set(ctx context.Context, id, answer string) error {
 	now := time.Now()
-	stat := fmt.Sprintf(
-		"INSERT INTO %s(%s, %s, %s, %s, %s) VALUES(%s, %s, %s, %s, %s)",
-		s.dialect.Quote(s.tableName),
-		s.dialect.Quote("id"),
-		s.dialect.Quote("category"),
-		s.dialect.Quote("answer"),
-		s.dialect.Quote("created_at"),
-		s.dialect.Quote("expires_in"),
-		s.dialect.BindVar(1),
-		s.dialect.BindVar(2),
-		s.dialect.BindVar(3),
-		s.dialect.BindVar(4),
-		s.dialect.BindVar(5),
-	)
-	_, err := s.db.Exec(stat, id, s.category, answer, now.Unix(), now.Add(s.expiration).Unix())
+	query, args, err := s.dialect.Insert(s.tableName).Rows(
+		goqu.Record{
+			"id":         id,
+			"category":   s.category,
+			"answer":     answer,
+			"created_at": now.Unix(),
+			"expires_in": now.Add(s.expiration).Unix(),
+		},
+	).ToSQL()
+	if err != nil {
+		return err
+	}
+	_, err = s.db.ExecContext(ctx, query, args...)
 	return err
 }
 
@@ -155,11 +158,16 @@ func (s *Store) gc() {
 }
 
 func (s *Store) deleteExpired() {
-	stat := fmt.Sprintf(
-		"DELETE FROM %s WHERE category=%s AND expires_in<%s",
-		s.dialect.Quote(s.tableName),
-		s.dialect.BindVar(1),
-		s.dialect.BindVar(2),
-	)
-	s.db.Exec(stat, s.category, time.Now().Unix())
+	query, args, err := s.dialect.Delete(s.tableName).Where(
+		goqu.Ex{
+			"category":   s.category,
+			"expires_in": goqu.Op{"lt": time.Now().Unix()},
+		},
+	).ToSQL()
+	if err != nil {
+		log.Println(err)
+	}
+	if _, err := s.db.Exec(query, args...); err != nil {
+		log.Println(err)
+	}
 }
