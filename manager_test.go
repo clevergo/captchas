@@ -5,6 +5,7 @@
 package captchas
 
 import (
+	"context"
 	"errors"
 	"reflect"
 	"testing"
@@ -46,14 +47,14 @@ func TestManagerIsEqual(t *testing.T) {
 type testStore struct {
 }
 
-func (s *testStore) Get(id string, clear bool) (string, error) {
+func (s *testStore) Get(ctx context.Context, id string, clear bool) (string, error) {
 	if clear {
 		return "getAndDel", nil
 	}
 	return "get", nil
 }
 
-func (s *testStore) Set(id, answer string) error {
+func (s *testStore) Set(ctx context.Context, id, answer string) error {
 	return nil
 }
 
@@ -82,7 +83,7 @@ func TestNew(t *testing.T) {
 func TestManagerGenerate(t *testing.T) {
 	driver := &testDriver{}
 	m := New(&testStore{}, driver)
-	captcha1, err1 := m.Generate()
+	captcha1, err1 := m.Generate(context.TODO())
 	captcha2, err2 := driver.Generate()
 	if !reflect.DeepEqual(captcha1, captcha2) {
 		t.Errorf("expected captcha %v, got %v", captcha2, captcha1)
@@ -96,8 +97,8 @@ func TestManagerGet(t *testing.T) {
 	store := &testStore{}
 	m := New(store, &testDriver{})
 	for _, clear := range []bool{true, false} {
-		val1, err1 := m.Get("foo", clear)
-		val2, err2 := store.Get("foo", clear)
+		val1, err1 := m.Get(context.TODO(), "foo", clear)
+		val2, err2 := store.Get(context.TODO(), "foo", clear)
 		if val1 != val2 {
 			t.Errorf("expected value %v, got %v", val2, val1)
 		}
@@ -111,7 +112,7 @@ func TestManagerVerify(t *testing.T) {
 	store := &testStore{}
 	m := New(store, &testDriver{})
 	for _, clear := range []bool{true, false} {
-		err1 := m.Verify("foo", "bar", clear)
+		err1 := m.Verify(context.TODO(), "foo", "bar", clear)
 		if !reflect.DeepEqual(err1, ErrCaptchaIncorrect) {
 			t.Errorf("expected err %v, got %v", ErrCaptchaIncorrect, err1)
 		}

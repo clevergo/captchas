@@ -5,6 +5,7 @@
 package captchas
 
 import (
+	"context"
 	"errors"
 	"strings"
 )
@@ -42,12 +43,12 @@ func New(store Store, driver Driver, opts ...Option) *Manager {
 }
 
 // Generate generates a new captcha and save it to store, returns an error if failed.
-func (m *Manager) Generate() (Captcha, error) {
+func (m *Manager) Generate(ctx context.Context) (Captcha, error) {
 	captcha, err := m.driver.Generate()
 	if err != nil {
 		return nil, err
 	}
-	if err = m.store.Set(captcha.ID(), captcha.Answer()); err != nil {
+	if err = m.store.Set(ctx, captcha.ID(), captcha.Answer()); err != nil {
 		return nil, err
 	}
 
@@ -55,8 +56,8 @@ func (m *Manager) Generate() (Captcha, error) {
 }
 
 // Get is a shortcut of Store.Get.
-func (m *Manager) Get(id string, clear bool) (string, error) {
-	return m.store.Get(id, clear)
+func (m *Manager) Get(ctx context.Context, id string, clear bool) (string, error) {
+	return m.store.Get(ctx, id, clear)
 }
 
 // Errors
@@ -67,8 +68,8 @@ var (
 
 // Verify verifies whether the given actual value is equal to the
 // answer of captcha, returns an error if failed.
-func (m *Manager) Verify(id, actual string, clear bool) error {
-	answer, err := m.store.Get(id, clear)
+func (m *Manager) Verify(ctx context.Context, id, actual string, clear bool) error {
+	answer, err := m.store.Get(ctx, id, clear)
 	if err != nil {
 		return err
 	}

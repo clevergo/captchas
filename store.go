@@ -4,14 +4,16 @@
 
 package captchas
 
+import "context"
+
 // Store defines how to save and load captcha information.
 type Store interface {
 	// Get returns the answer of the given captcha ID, returns
 	// an error if failed. Clear indicates whether delete the
 	// captcha after fetching.
-	Get(id string, clear bool) (string, error)
+	Get(ctx context.Context, id string, clear bool) (string, error)
 
 	// Set saves the captcha ID and answer, returns error
 	// if failed.
-	Set(id, answer string) error
+	Set(ctx context.Context, id, answer string) error
 }
