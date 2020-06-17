@@ -83,7 +83,7 @@ func main() {
 
 // generates a new captcha
 func generate(w http.ResponseWriter, r *http.Request) {
-	captcha, err := manager.Generate()
+	captcha, err := manager.Generate(r.Context())
 	if err != nil {
 		http.Error(w, err.Error(), 500)
                 return
@@ -113,7 +113,7 @@ func validate(w http.ResponseWriter, r *http.Request) {
 	captcha := r.PostFormValue("captcha")
 
 	// verify
-	if err := manager.Verify(captchaID, captcha, true); err != nil {
+	if err := manager.Verify(r.Context(), captchaID, captcha, true); err != nil {
 		io.WriteString(w, fmt.Sprintf("captcha is invalid: %s", err.Error()))
 		return
 	}
