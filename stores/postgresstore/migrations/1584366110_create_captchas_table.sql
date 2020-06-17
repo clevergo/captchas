@@ -7,4 +7,4 @@ CREATE TABLE captchas (
     PRIMARY KEY(id, category)
 );
 
-CREATE INDEX  captchas_expires_on_idx  ON captchas (expires_in);
+CREATE INDEX captchas_expires_on_idx ON captchas (expires_in);
