@@ -5,6 +5,7 @@
 package redisstore
 
 import (
+	"context"
 	"time"
 
 	"clevergo.tech/captchas"
@@ -35,6 +36,8 @@ type Store struct {
 	prefix     string
 }
 
+var _ captchas.Store = New(nil)
+
 // New returns a redis store.
 func New(client *redis.Client, opts ...Option) *Store {
 	s := &Store{
@@ -55,9 +58,9 @@ func (s *Store) getKey(id string) string {
 }
 
 // Get implements Store.Get.
-func (s *Store) Get(id string, clear bool) (string, error) {
+func (s *Store) Get(ctx context.Context, id string, clear bool) (string, error) {
 	key := s.getKey(id)
-	tx := s.client.TxPipeline()
+	tx := s.client.WithContext(ctx).TxPipeline()
 	get := tx.Get(key)
 	var del *redis.IntCmd
 	if clear {
@@ -87,9 +90,9 @@ func (s *Store) Get(id string, clear bool) (string, error) {
 }
 
 // Set implements Store.Set.
-func (s *Store) Set(id string, value string) error {
+func (s *Store) Set(ctx context.Context, id string, value string) error {
 	key := s.getKey(id)
-	_, err := s.client.Set(key, value, s.expiration).Result()
+	_, err := s.client.WithContext(ctx).Set(key, value, s.expiration).Result()
 	if err != nil {
 		return err
 	}

@@ -5,6 +5,7 @@
 package redisstore
 
 import (
+	"context"
 	"testing"
 	"time"
 
@@ -57,17 +58,18 @@ func TestNew(t *testing.T) {
 
 func TestStoreGet(t *testing.T) {
 	s := New(testClient)
-	_, err := s.Get("foo", true)
+	ctx := context.TODO()
+	_, err := s.Get(ctx, "foo", true)
 	if err == nil {
 		t.Error("expected a non-nil error, got nil")
 	}
 
-	err = s.Set("foo", "bar")
+	err = s.Set(ctx, "foo", "bar")
 	if err != nil {
 		t.Fatalf("failed to set: %s", err)
 	}
 	for _, clear := range []bool{false, true} {
-		value, err := s.Get("foo", clear)
+		value, err := s.Get(ctx, "foo", clear)
 		if err != nil {
 			t.Fatalf("expected non error, got %s", err)
 		}
@@ -76,7 +78,7 @@ func TestStoreGet(t *testing.T) {
 		}
 	}
 
-	_, err = s.Get("foo", true)
+	_, err = s.Get(ctx, "foo", true)
 	if err == nil {
 		t.Error("expected a non-nil error, got nil")
 	}
