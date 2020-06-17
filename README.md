@@ -3,7 +3,6 @@
 [![Coverage Status](https://coveralls.io/repos/github/clevergo/captchas/badge.svg?branch=master)](https://coveralls.io/github/clevergo/captchas?branch=master)
 [![Go.Dev reference](https://img.shields.io/badge/go.dev-reference-blue?logo=go&logoColor=white)](https://pkg.go.dev/clevergo.tech/captchas?tab=doc)
 [![Go Report Card](https://goreportcard.com/badge/github.com/clevergo/captchas)](https://goreportcard.com/report/github.com/clevergo/captchas)
-[![Sourcegraph](https://sourcegraph.com/github.com/clevergo/captchas/-/badge.svg)](https://sourcegraph.com/github.com/clevergo/captchas?badge)
 
 Base64 Captchas Manager, supports multiple [drivers](#drivers) and [stores](#stores).
 
