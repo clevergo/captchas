@@ -5,6 +5,7 @@
 package memstore
 
 import (
+	"context"
 	"sync"
 	"time"
 
@@ -41,6 +42,8 @@ type Store struct {
 	items      map[string]*item
 }
 
+var _ captchas.Store = New()
+
 // New returns a memory store.
 func New(opts ...Option) *Store {
 	s := &Store{
@@ -60,7 +63,7 @@ func New(opts ...Option) *Store {
 }
 
 // Get implements Store.Get.
-func (s *Store) Get(id string, clear bool) (string, error) {
+func (s *Store) Get(ctx context.Context, id string, clear bool) (string, error) {
 	if clear {
 		item, err := s.getAndDel(id)
 		if err != nil {
@@ -105,7 +108,7 @@ func (s *Store) getAndDel(id string) (*item, error) {
 }
 
 // Set implements Store.Set.
-func (s *Store) Set(id, answer string) error {
+func (s *Store) Set(ctx context.Context, id, answer string) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.items[id] = &item{
