@@ -5,6 +5,7 @@
 package drivers
 
 import (
+	"clevergo.tech/captchas"
 	"github.com/mojocn/base64Captcha"
 )
 
@@ -60,6 +61,8 @@ type Digit struct {
 	// number of background circles.
 	dotCount int
 }
+
+var _ captchas.Driver = NewDigit()
 
 // NewDigit return a digit driver.
 func NewDigit(opts ...DigitOption) *Digit {

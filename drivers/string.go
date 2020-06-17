@@ -7,6 +7,7 @@ package drivers
 import (
 	"image/color"
 
+	"clevergo.tech/captchas"
 	"github.com/mojocn/base64Captcha"
 )
 
@@ -80,6 +81,8 @@ type Str struct {
 }
 
 const defaultStringSource = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+var _ captchas.Driver = NewString()
 
 // NewString returns a string driver.
 func NewString(opts ...StringOption) *Str {

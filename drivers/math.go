@@ -7,6 +7,7 @@ package drivers
 import (
 	"image/color"
 
+	"clevergo.tech/captchas"
 	"github.com/mojocn/base64Captcha"
 )
 
@@ -62,6 +63,8 @@ type Math struct {
 	bgColor *color.RGBA
 	fonts   []string
 }
+
+var _ captchas.Driver = NewMath()
 
 // NewMath return a math driver.
 func NewMath(opts ...MathOption) *Math {

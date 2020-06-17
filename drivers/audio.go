@@ -5,6 +5,7 @@
 package drivers
 
 import (
+	"clevergo.tech/captchas"
 	"github.com/mojocn/base64Captcha"
 )
 
@@ -33,6 +34,8 @@ type Audio struct {
 	// max absolute skew factor of a single audio.
 	language string
 }
+
+var _ captchas.Driver = NewAudio()
 
 // NewAudio returns an audio driver.
 func NewAudio(opts ...AudioOption) *Audio {

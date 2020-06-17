@@ -7,6 +7,7 @@ package drivers
 import (
 	"image/color"
 
+	"clevergo.tech/captchas"
 	"github.com/mojocn/base64Captcha"
 )
 
@@ -80,6 +81,8 @@ type Chinese struct {
 }
 
 const defaultChineseSource = "零一二三四五六七八九十"
+
+var _ captchas.Driver = NewChinese()
 
 // NewChinese returns a chinese driver.
 func NewChinese(opts ...ChineseOption) *Chinese {
