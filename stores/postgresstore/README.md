@@ -8,6 +8,7 @@ $ go get clevergo.tech/captchas/stores/postgresstore
 
 ```go
 import (
+	"clevergo.tech/captchas/stores/dbstore"
 	"clevergo.tech/captchas/stores/postgresstore"
 	_ "github.com/lib/pq"
 )

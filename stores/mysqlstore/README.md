@@ -8,6 +8,7 @@ $ go get clevergo.tech/captchas/stores/mysqlstore
 
 ```go
 import (
+	"clevergo.tech/captchas/stores/dbstore"
 	"clevergo.tech/captchas/stores/mysqlstore"
 	_ "github.com/go-sql-driver/mysql"
 )
