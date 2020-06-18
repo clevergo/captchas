@@ -32,9 +32,14 @@ func TestManagerIsEqual(t *testing.T) {
 }
 
 type testStore struct {
+	errGet error
+	errSet error
 }
 
 func (s *testStore) Get(ctx context.Context, id string, clear bool) (string, error) {
+	if s.errGet != nil {
+		return "", s.errGet
+	}
 	if clear {
 		return "getAndDel", nil
 	}
@@ -42,6 +47,9 @@ func (s *testStore) Get(ctx context.Context, id string, clear bool) (string, err
 }
 
 func (s *testStore) Set(ctx context.Context, id, answer string) error {
+	if s.errSet != nil {
+		return s.errSet
+	}
 	return nil
 }
 
@@ -116,7 +124,13 @@ func TestManagerVerify(t *testing.T) {
 	store := &testStore{}
 	m := New(store, &testDriver{})
 	for _, clear := range []bool{true, false} {
-		err1 := m.Verify(context.TODO(), "foo", "bar", clear)
+		err1 := m.Verify(nil, "foo", "bar", clear)
 		assert.Equal(t, ErrCaptchaIncorrect, err1)
 	}
+	assert.Nil(t, m.Verify(nil, "", "get", false))
+	assert.Nil(t, m.Verify(nil, "", "getAndDel", true))
+
+	errGet := errors.New("failed to get answer")
+	m.store = &testStore{errGet: errGet}
+	assert.Equal(t, errGet, m.Verify(nil, "", "", false))
 }
