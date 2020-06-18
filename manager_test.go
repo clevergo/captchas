@@ -7,41 +7,28 @@ package captchas
 import (
 	"context"
 	"errors"
-	"reflect"
+	"html/template"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestCaseSensitive(t *testing.T) {
 	m := &Manager{}
 	CaseSensitive(true)(m)
-	if !m.caseSensitive {
-		t.Error("expected to enable case sensitive")
-	}
+	assert.True(t, m.caseSensitive)
 	CaseSensitive(false)(m)
-	if m.caseSensitive {
-		t.Error("expected to disable case sensitive")
-	}
+	assert.False(t, m.caseSensitive)
 }
 
 func TestManagerIsEqual(t *testing.T) {
 	m := &Manager{}
-
-	if m.isEqual("", "bar") {
-		t.Errorf("expected %t, got %t", false, m.isEqual("", "bar"))
-	}
-	if m.isEqual("foo", "") {
-		t.Errorf("expected %t, got %t", false, m.isEqual("foo", ""))
-	}
-
+	assert.False(t, m.isEqual("foo", ""))
+	assert.False(t, m.isEqual("", "foo"))
 	CaseSensitive(true)(m)
-	if m.isEqual("foo", "Foo") {
-		t.Errorf("expected %q not equals %q", "foo", "Foo")
-	}
-
+	assert.False(t, m.isEqual("foo", "Foo"))
 	CaseSensitive(false)(m)
-	if !m.isEqual("foo", "Foo") {
-		t.Errorf("expected %q equals %q", "foo", "Foo")
-	}
+	assert.True(t, m.isEqual("foo", "Foo"))
 }
 
 type testStore struct {
@@ -59,38 +46,59 @@ func (s *testStore) Set(ctx context.Context, id, answer string) error {
 }
 
 type testDriver struct {
+	captcha Captcha
 }
 
 func (d *testDriver) Generate() (Captcha, error) {
+	if d.captcha != nil {
+		return d.captcha, nil
+	}
 	return nil, errors.New("unsupport to generate captcha")
+}
+
+type testCaptcha struct {
+	id     string
+	answer string
+}
+
+func (c *testCaptcha) ID() string {
+	return c.id
+}
+
+func (c *testCaptcha) Answer() string {
+	return c.answer
+}
+
+func (c *testCaptcha) EncodeToString() string {
+	return ""
+}
+
+func (c *testCaptcha) HTMLField(fieldName string) template.HTML {
+	return template.HTML("")
 }
 
 func TestNew(t *testing.T) {
 	store := &testStore{}
 	driver := &testDriver{}
 	m := New(store, driver, CaseSensitive(false))
-	if m.caseSensitive {
-		t.Error("expected to disable case sensitive")
-	}
-	if !reflect.DeepEqual(store, m.store) {
-		t.Errorf("expected store %v, got %v", store, m.store)
-	}
-	if !reflect.DeepEqual(driver, m.driver) {
-		t.Errorf("expected driver %v, got %v", driver, m.driver)
-	}
+	assert.False(t, m.caseSensitive)
+	assert.Equal(t, store, m.store)
+	assert.Equal(t, driver, m.driver)
 }
 
 func TestManagerGenerate(t *testing.T) {
 	driver := &testDriver{}
 	m := New(&testStore{}, driver)
-	captcha1, err1 := m.Generate(context.TODO())
+	captcha1, err1 := m.Generate(nil)
 	captcha2, err2 := driver.Generate()
-	if !reflect.DeepEqual(captcha1, captcha2) {
-		t.Errorf("expected captcha %v, got %v", captcha2, captcha1)
-	}
-	if !reflect.DeepEqual(err1, err2) {
-		t.Errorf("expected err %v, got %v", err2, err1)
-	}
+	assert.Equal(t, captcha2, captcha1)
+	assert.Equal(t, err2, err1)
+
+	expectedCaptcha := &testCaptcha{id: "foo", answer: "bar"}
+	m.driver = &testDriver{captcha: expectedCaptcha}
+	captcha, err := m.Generate(nil)
+	assert.Nil(t, err)
+	assert.Equal(t, expectedCaptcha, captcha)
 }
 
 func TestManagerGet(t *testing.T) {
@@ -99,12 +107,8 @@ func TestManagerGet(t *testing.T) {
 	for _, clear := range []bool{true, false} {
 		val1, err1 := m.Get(context.TODO(), "foo", clear)
 		val2, err2 := store.Get(context.TODO(), "foo", clear)
-		if val1 != val2 {
-			t.Errorf("expected value %v, got %v", val2, val1)
-		}
-		if !reflect.DeepEqual(err1, err2) {
-			t.Errorf("expected err %v, got %v", err2, err1)
-		}
+		assert.Equal(t, val2, val1)
+		assert.Equal(t, err2, err1)
 	}
 }
 
@@ -113,8 +117,6 @@ func TestManagerVerify(t *testing.T) {
 	m := New(store, &testDriver{})
 	for _, clear := range []bool{true, false} {
 		err1 := m.Verify(context.TODO(), "foo", "bar", clear)
-		if !reflect.DeepEqual(err1, ErrCaptchaIncorrect) {
-			t.Errorf("expected err %v, got %v", ErrCaptchaIncorrect, err1)
-		}
+		assert.Equal(t, ErrCaptchaIncorrect, err1)
 	}
 }
