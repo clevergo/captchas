@@ -1,8 +1,8 @@
 # Captchas
-[![Build Status](https://travis-ci.org/clevergo/captchas.svg?branch=master)](https://travis-ci.org/clevergo/captchas)
-[![Coverage Status](https://coveralls.io/repos/github/clevergo/captchas/badge.svg?branch=master)](https://coveralls.io/github/clevergo/captchas?branch=master)
-[![Go.Dev reference](https://img.shields.io/badge/go.dev-reference-blue?logo=go&logoColor=white)](https://pkg.go.dev/clevergo.tech/captchas?tab=doc)
-[![Go Report Card](https://goreportcard.com/badge/github.com/clevergo/captchas)](https://goreportcard.com/report/github.com/clevergo/captchas)
+[![Build Status](https://img.shields.io/travis/clevergo/captchas?style=for-the-badge)](https://travis-ci.org/clevergo/captchas)
+[![Coverage Status](https://img.shields.io/coveralls/github/clevergo/captchas?style=for-the-badge)](https://coveralls.io/github/clevergo/captchas?branch=master)
+[![Go.Dev reference](https://img.shields.io/badge/go.dev-reference-blue?logo=go&logoColor=white&style=for-the-badge)](https://pkg.go.dev/clevergo.tech/captchas?tab=doc)
+[![Go Report Card](https://goreportcard.com/badge/github.com/clevergo/captchas?style=for-the-badge)](https://goreportcard.com/report/github.com/clevergo/captchas)
 
 Base64 Captchas Manager, supports multiple [drivers](#drivers) and [stores](#stores).
 
